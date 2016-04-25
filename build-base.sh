@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION=0.0.2
+VERSION=2016.04.20
 NAME=base-system
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -12,7 +12,11 @@ echo "Building $IMAGE_NAME"
 acbuild set-name rkt.mafiasi.de/$NAME
 debootstrap --variant=minbase jessie .acbuild/currentaci/rootfs http://ftp.de.debian.org/debian/
 
-acbuild run -- apt update
-acbuild run -- apt install -y vim-tiny
+acbuild run -- sh <<EOF
+echo deb http://security.debian.org/ jessie/updates main >> /etc/apt/sources.list
+apt update
+apt upgrade -y
+apt install -y vim
+EOF
 
 acbuild write --overwrite $IMAGE_NAME
