@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION=2016.04.20
+VERSION=2016.05.02
 NAME=base-system
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -16,7 +16,10 @@ acbuild run -- sh <<EOF
 echo deb http://security.debian.org/ jessie/updates main >> /etc/apt/sources.list
 apt update
 apt upgrade -y
-apt install -y vim
+apt install -y vim unattended-upgrades
+echo 'unattended-upgrades       unattended-upgrades/enable_auto_updates boolean true' | debconf-set-selections
+dpkg-reconfigure -f noninteractive unattended-upgrades
 EOF
 
+acbuild set-exec -- /bin/bash
 acbuild write --overwrite $IMAGE_NAME
