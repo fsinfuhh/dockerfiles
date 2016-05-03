@@ -1,12 +1,10 @@
 #! /bin/bash
 
-set -e
-
 VERSION=2016.04.20
 NAME=gogs
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
-. acbuildhelper.sh
+. ../acbuildhelper.sh
 
 echo "Building $IMAGE_NAME"
 
