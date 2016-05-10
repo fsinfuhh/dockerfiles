@@ -1,5 +1,4 @@
 config-datei einbinden
-'storage' mountpoint deklarieren
+storage-mountpoint nutzen
 
-ssh-config
-ssh-keys!
+ssh-server starten
