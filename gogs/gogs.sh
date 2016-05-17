@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.13
+VERSION=2016.05.17
 NAME=gogs
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -26,13 +26,16 @@ acbuild run -- /bin/sh -es <<"EOF"
     go build
 EOG
 
-    mkdir -p /home/gogs/go/src/github.com/gogits/gogs/custom/conf
-    ln -sf /opt/config/app.ini /home/gogs/go/src/github.com/gogits/gogs/custom/conf/
+    mkdir /opt/gogs
+    cp -ra /home/gogs/go/src/github.com/gogits/gogs /opt/gogs
+    chown -R root:nogroup /opt/gogs
+    mkdir -p /opt/gogs/custom/conf
+    ln -sf /opt/config/app.ini /opt/gogs/custom/conf/
     
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh
 export USER=gogs HOME=/home/gogs
-exec /home/gogs/go/src/github.com/gogits/gogs/gogs web
+exec /opt/gogs/gogs web
 EOG
     chmod +x /usr/local/bin/run
 
@@ -44,7 +47,6 @@ acbuild mount add config /opt/config
 acbuild mount add log /opt/log
 acbuild set-user -- gogs
 acbuild set-group -- nogroup
-acbuild set-working-directory -- /home/gogs/go/src/github.com/gogits/gogs
 acbuild set-exec -- /usr/local/bin/run
 
 acbuild write --overwrite $IMAGE_NAME
