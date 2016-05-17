@@ -11,8 +11,9 @@ elif [[ "$1" != --secret ]]; then
 fi
 shift
 
+T=$(mktemp -d ${TMPDIR-/tmp}/acbuild.XXXXXX)
 acbuild () {
-    command acbuild --debug $@
+    command acbuild --work-path $T --debug $@
 }
 
 acbuildend () {
