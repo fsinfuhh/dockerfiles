@@ -8,7 +8,7 @@ IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
 echo "Building $IMAGE_NAME"
 acbuild set-name rkt.mafiasi.de/$NAME
-debootstrap --variant=minbase jessie .acbuild/currentaci/rootfs http://ftp.de.debian.org/debian/
+debootstrap --variant=minbase jessie $T/.acbuild/currentaci/rootfs http://ftp.de.debian.org/debian/
 
 acbuild run -- sh -es <<EOF
 echo deb http://security.debian.org/ jessie/updates main >> /etc/apt/sources.list
