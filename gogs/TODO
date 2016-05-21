@@ -1,4 +1,3 @@
-LDAP
-Mail
-
-Restrict network access? (Intranet mode)
+- Mail
+- Run sshd directly under gogs
+- Restrict network access? (Intranet mode)
