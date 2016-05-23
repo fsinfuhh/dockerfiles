@@ -10,7 +10,7 @@ $CONFIG = array (
   ),
   'datadirectory' => '/opt/storage',
   'dbtype' => 'pgsql',
-  'version' => '9.0.2',
+  'version' => '8.2.5.2',
   'dbname' => 'owncloud',
   'dbhost' => 'tams-cml.informatik.uni-hamburg.de:6432',
   'dbtableprefix' => 'oc_',
@@ -30,6 +30,13 @@ $CONFIG = array (
   'minimum.supported.desktop.version' => '1.5',
   'memcache.local' => '\\OC\\Memcache\\APCu',
   'filelocking.enabled' => 'true',
-  // 'memcache.locking' => '\\OC\\Memcache\\APCu',
+  'memcache.locking' => '\\OC\\Memcache\\Redis',
+  'redis' =>
+	  array (
+		'host' => 'localhost',
+		'port' => 6380,
+		'timeout' => 0,
+		'password' => '',
+	  ),
   'trashbin_retention_obligation' => 'auto',
 );
