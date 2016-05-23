@@ -46,7 +46,7 @@ EOG
 
 EOF
 acbuild port add web tcp 3005
-acbuild port add ssh tcp 22
+acbuild port add ssh tcp 3006
 acbuild mount add storage /opt/storage
 acbuild mount add config /opt/config
 acbuild mount add log /opt/log

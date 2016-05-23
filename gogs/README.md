@@ -3,8 +3,8 @@
 UID: 2001
 
 Ports:
-- ssh: 22
 - web: 3005
+- ssh: 3006
 
 Mountpoints:
 - config
@@ -24,9 +24,9 @@ The LDAP settings can be configured via the Web interface.
 
 # How to run:
 
-## Option 1: Port 22 of the host will be forwarded to the ssh daemon of the container.
+## Option 1: SSH-Port will be forwarded to the ssh daemon of the container (3006).
 ```sh
-rkt run --port=web:3005 --port=ssh:22 --volume storage,kind=host,source=/srv/gogs --volume config,kind=host,source=/opt/config/gogs --volume log,kind=host,source=/var/log/gogs --debug --interactive --dns=134.100.9.61 rkt.mafiasi.de/gogs
+rkt run --port=web:3005 --port=ssh:3006 --volume storage,kind=host,source=/srv/gogs --volume config,kind=host,source=/opt/config/gogs --volume log,kind=host,source=/var/log/gogs --debug --interactive --dns=134.100.9.61 rkt.mafiasi.de/gogs
 ```
 
 ## Option 2: The host runs a sshd that will accept ssh connections on port 22 and forwards the data transparently to the container:
