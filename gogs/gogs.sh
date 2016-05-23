@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.21
+VERSION=2016.05.23
 NAME=gogs
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -25,6 +25,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     cd $GOPATH/src/github.com/gogits/gogs
     go build
 EOG
+    apt -y purge golang golang-doc golang-go golang-src
 
     mkdir /opt/gogs
     cp -ra /home/gogs/go/src/github.com/gogits/gogs /opt
@@ -32,6 +33,7 @@ EOG
     mkdir -p /opt/gogs/custom/conf
     ln -sf /opt/config/app.ini /opt/gogs/custom/conf/
     usermod -d /opt/storage/gituser gogs
+    rm -r /home/gogs
     echo "AcceptEnv SSH_ORIGINAL_COMMAND" >> /etc/ssh/sshd_config
     
     cat > /usr/local/bin/run <<EOG
