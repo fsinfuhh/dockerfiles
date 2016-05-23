@@ -29,12 +29,13 @@ The LDAP settings can be configured via the Web interface.
 rkt run --port=web:3005 --port=ssh:3006 --volume storage,kind=host,source=/srv/gogs --volume config,kind=host,source=/opt/config/gogs --volume log,kind=host,source=/var/log/gogs --debug --interactive --dns=134.100.9.61 rkt.mafiasi.de/gogs
 ```
 
-## Option 2: The host runs a sshd that will accept ssh connections on port 22 and forwards the data transparently to the container:
+## Option 2: The host runs a sshd that will accept ssh connections and forwards the data transparently to the ssh daemon of the container (22):
 
 Additional setup:
 ```sh
+# Set DISABLE_SSH = true in config file
 adduser --home $GOGS_STORAGE/gituser --shell $GOGS_STORAGE/gogs-shell --uid 2001 gogs
-su -c "ssh-keygen -t ed25519; cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys" gogs
+su -c "ssh-keygen -t ed25519;" gogs
 cp gogs-shell $GOGS_STORAGE/gogs-shell
 ```
 
@@ -42,3 +43,7 @@ Run:
 ```sh
 rkt run --port=web:3005 --volume storage,kind=host,source=/srv/gogs --volume config,kind=host,source=/opt/config/gogs --volume log,kind=host,source=/var/log/gogs --debug --interactive --dns=134.100.9.61 rkt.mafiasi.de/gogs
 ```
+
+
+# Trivia:
+Can be run with rkt.mafiasi.de/redis.

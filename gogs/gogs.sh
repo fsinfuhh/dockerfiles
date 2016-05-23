@@ -38,7 +38,11 @@ EOG
     
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh
-service ssh start
+if grep -i "START_SSH_SERVER *= *false" /opt/config/app.ini; then
+    echo AuthorizedKeysFile .ssh/id_ed25519.pub >> /etc/ssh/sshd_config
+    service ssh start
+fi
+
 export USER=gogs HOME=/home/gogs
 exec su -c 'hostname -I > /opt/storage/gogs.ip; /opt/gogs/gogs web' gogs
 EOG
