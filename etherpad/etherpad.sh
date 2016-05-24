@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.18
+VERSION=2016.05.24
 NAME=etherpad
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -19,6 +19,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     echo 'deb deb https://deb.nodesource.com/node_4.x jessie main' > /etc/apt/sources.list.d/nodejs.list
     apt update
     apt -y install nodejs
+    apt-get clean
 
     wget -nv https://github.com/ether/etherpad-lite/tarball/master -O- | tar -C /opt -xz
     mv /opt/ether-etherpadlite* /opt/etherpad

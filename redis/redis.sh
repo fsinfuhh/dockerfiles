@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.23
+VERSION=2016.05.24
 NAME=redis
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -13,6 +13,7 @@ acbuild dependency add rkt.mafiasi.de/base-system
 
 acbuild run -- /bin/sh -es <<"EOF"
     apt-get -y --no-install-recommends install redis-server
+    apt-get clean
     service redis-server stop
     usermod -u 2003 -g nogroup redis
     chown -R redis:nogroup /var/log/redis

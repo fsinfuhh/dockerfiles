@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.23
+VERSION=2016.05.24
 NAME=gogs
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -26,6 +26,8 @@ acbuild run -- /bin/sh -es <<"EOF"
     go build
 EOG
     apt -y purge golang golang-doc golang-go golang-src
+    apt-get -y autoremove
+    apt-get clean
 
     mkdir /opt/gogs
     cp -ra /home/gogs/go/src/github.com/gogits/gogs /opt

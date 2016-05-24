@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=2016.05.17
+VERSION=2016.05.24
 NAME=base-system
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -16,6 +16,7 @@ echo deb http://security.debian.org/ jessie/updates main >> /etc/apt/sources.lis
 apt update
 apt upgrade -y
 apt install -y vim ca-certificates
+apt-get clean
 mkdir /opt/config /opt/storage /opt/log
 EOF
 

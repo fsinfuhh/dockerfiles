@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.23
+VERSION=2016.05.24
 NAME=owncloud
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -19,6 +19,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     echo 'deb http://download.owncloud.org/download/repositories/8.2/Debian_8.0/ /' > /etc/apt/sources.list.d/owncloud.list
     apt update
     apt -y install owncloud-files
+    apt-get clean
 
     ln -sf /opt/config/config.php /var/www/owncloud/config/config.php
 
