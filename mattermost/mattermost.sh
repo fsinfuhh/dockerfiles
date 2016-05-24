@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.18
+VERSION=2016.05.24
 NAME=mattermost
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -18,6 +18,8 @@ acbuild run -- /bin/sh -es <<"EOF"
     chown -R www-data:nogroup /opt/mattermost
 
     ln -sf /opt/config/config.json /opt/mattermost/config/config.json
+    rmdir /opt/mattermost/logs
+    ln -sf /opt/log /opt/mattermost/logs
 
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh

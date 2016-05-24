@@ -39,7 +39,7 @@
     },
     "SqlSettings": {
         "DriverName": "postgres",
-        "DataSource": "mattermost:PASSWORD@tams-cml.informatik.uni-hamburg.de:5432/mattermost?sslmode=disable&connect_timeout=10",
+        "DataSource": "postgres://mattermost:PASSWORD@tams-cml.informatik.uni-hamburg.de:5432/mattermost?sslmode=disable&connect_timeout=10",
         "DataSourceReplicas": [],
         "MaxIdleConns": 10,
         "MaxOpenConns": 10,
@@ -56,7 +56,7 @@
     },
     "FileSettings": {
         "DriverName": "local",
-        "Directory": "./data/",
+        "Directory": "/opt/storage/data/",
         "EnablePublicLink": false,
         "PublicLinkSalt": "A705AklYF8MFDOfcwh3I488G8vtLlVip",
         "ThumbnailWidth": 120,
