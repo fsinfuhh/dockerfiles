@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.19
+VERSION=2016.05.24
 NAME=dashboard
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -12,24 +12,34 @@ acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base-system
 
 acbuild run -- /bin/sh -es <<"EOF"
-    usermod -u 2002 -g nogroup www-data
-    apt-get -y --no-install-recommends install wget uwsgi python python-virtualenv python-pip virtualenv yui-compressor make
+    usermod -u 2004 -g nogroup www-data
+    apt-get -y --no-install-recommends install wget uwsgi uwsgi-plugin-python python python-virtualenv python-pip virtualenv yui-compressor make git python-bleach python-creoleparser python-django-auth-ldap python-pil python-psycopg2 python-gpgme python-pygraphviz python-pypdf2 python-ldap python-magic python-requests gettext
 
-    virtualenv /opt/dashboard
-    cd /opt/dashboard
-    . ./bin/activate
-    wget -nv https://github.com/fsinfuhh/mafiasi/archive/master.tar.gz | tar -xz
+    cd /opt
+    wget -nv https://github.com/fsinfuhh/mafiasi/archive/feature_cml.tar.gz -O- | tar -xz
+    mv mafiasi-feature_cml dashboard
+    virtualenv --system-site-packages /opt/dashboard/.pyenv
+    cd dashboard
+    . .pyenv/bin/activate
     pip install -r requirements.txt
+    pip install -U 'Django<1.9'
+    pip install django-ldapdb
     make
-    ./manage.py collectstatic
+    mv mafiasi/settings.py.example mafiasi/settings.py
+    ./manage.py collectstatic --noinput --link
 
 
     ln -sf /opt/config/settings.py /opt/dashboard/mafiasi/settings.py
-    ln -sf /opt/storage/_media /opt/dashboard/_media
+    ln -sf /opt/storage/media /opt/dashboard/_media
+    apt-get -y purge yui-compressor git python-pip make
+    apt-get -y autoremove
+    apt-get clean
 
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh
 export USER=www-data HOME=/home/www-data
+. /opt/dashboard/.pyenv/bin/activate
+/opt/dashboard/manage.py migrate
 exec uwsgi /etc/uwsgi/dashboard.ini
 EOG
     chmod +x /usr/local/bin/run
