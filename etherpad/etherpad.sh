@@ -12,13 +12,13 @@ acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base-system
 
 acbuild run -- /bin/sh -es <<"EOF"
-    usermod -u 2002 -g nogroup www-data
+    usermod -u 2005 -g nogroup www-data
     apt-get -y --no-install-recommends install wget lsb-release apt-transport-https
 
     wget -nv https://deb.nodesource.com/gpgkey/nodesource.gpg.key -O- | apt-key add -
     echo 'deb https://deb.nodesource.com/node_4.x jessie main' > /etc/apt/sources.list.d/nodejs.list
     apt update
-    apt -y install nodejs curl
+    apt -y install nodejs curl make g++
     apt-get clean
 
     wget -nv https://github.com/ether/etherpad-lite/tarball/master -O- | tar -C /opt -xz
@@ -31,18 +31,21 @@ acbuild run -- /bin/sh -es <<"EOF"
     # ep_font_size & font famely
  
     ln -sf /opt/config/settings.json /opt/etherpad/settings.json
+    ln -sf /opt/config/APIKEY.txt /opt/etherpad/APIKEY.txt
 
+    apt -y purge make g++
+    apt-get -y autoremove
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh
 export USER=www-data HOME=/opt/etherpad
 cd /opt/etherpad
-exec ./bin/safeRun.sh
+exec ./bin/safeRun.sh /opt/log/etherpad.log
 EOG
     chmod +x /usr/local/bin/run
 
 EOF
 acbuild port add www tcp 9001
-acbuild mount add storage /opt/storage
+#acbuild mount add storage /opt/storage
 acbuild mount add config /opt/config
 acbuild mount add log /opt/log
 acbuild set-user -- www-data
