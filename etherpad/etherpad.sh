@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.24
+VERSION=2016.05.30
 NAME=etherpad
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -16,22 +16,27 @@ acbuild run -- /bin/sh -es <<"EOF"
     apt-get -y --no-install-recommends install wget lsb-release apt-transport-https
 
     wget -nv https://deb.nodesource.com/gpgkey/nodesource.gpg.key -O- | apt-key add -
-    echo 'deb deb https://deb.nodesource.com/node_4.x jessie main' > /etc/apt/sources.list.d/nodejs.list
+    echo 'deb https://deb.nodesource.com/node_4.x jessie main' > /etc/apt/sources.list.d/nodejs.list
     apt update
-    apt -y install nodejs
+    apt -y install nodejs curl
     apt-get clean
 
     wget -nv https://github.com/ether/etherpad-lite/tarball/master -O- | tar -C /opt -xz
-    mv /opt/ether-etherpadlite* /opt/etherpad
-    chown -R ehterpad:nogroup /opt/etherpad
+    mv /opt/ether-etherpad-lite* /opt/etherpad
+    chown -R www-data:nogroup /opt/etherpad
 
-    ln -sf /opt/config/config.php /var/www/owncloud/config/config.php
+    cd /opt/etherpad
+    bin/installDeps.sh
+    npm install ep_adminpads ep_align ep_authornames ep_ether-o-meter  ep_headings2 ep_hide_referrer ep_latexexport ep_line_height ep_message_all ep_subscript_and_superscript
+    # ep_font_size & font famely
+ 
+    ln -sf /opt/config/settings.json /opt/etherpad/settings.json
 
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh
-export USER=www-data HOME=/home/www-data
+export USER=www-data HOME=/opt/etherpad
 cd /opt/etherpad
-exec ./bin/run.sh
+exec ./bin/safeRun.sh
 EOG
     chmod +x /usr/local/bin/run
 
