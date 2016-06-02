@@ -14,7 +14,7 @@ Mountpoints:
 Initial steps:
 ```sh
 mkdir -p /opt/config/dashboard /var/log/dashboard /srv/dashboard
-cp $CONFIG_DIR/settings.py /opt/config/settings.py
+cp $CONFIG_DIR/settings.py /opt/config/dashboard/settings.py
 chown 2004:nogroup /opt/config/dashboard /opt/config/dashboard/settings.py /var/log/dashboard /srv/dashboard
 ```
 
