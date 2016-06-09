@@ -14,7 +14,7 @@ acbuild dependency add rkt.mafiasi.de/base-system
 acbuild run -- /bin/sh -es <<"EOF"
     usermod -u 2006 -g nogroup www-data
     apt update
-    apt-get -y --no-install-recommends install wget uwsgi uwsgi-plugin-python python python-virtualenv python-pip virtualenv yui-compressor make git python-psycopg2 python-flask-sqlalchemy python-ldap python-magic python-requests gettext gcc python-dev python-scrypt
+    apt-get -y --no-install-recommends install wget uwsgi uwsgi-plugin-python python python-virtualenv python-pip virtualenv yui-compressor make git python-psycopg2 python-flask-sqlalchemy python-ldap python-magic python-requests gettext gcc python-dev python-scrypt ruby-sass coffeescript
 
     cd /opt
     wget -nv https://github.com/opatut/dudel/archive/hotfix.tar.gz -O- | tar -xz
@@ -29,6 +29,11 @@ acbuild run -- /bin/sh -es <<"EOF"
     mv config.py.example config.py
 
     ln -sf /opt/config/config.py /opt/dudel/config.py
+
+    mkdir /opt/dudel/dudel/static/.webassets-cache
+    mkdir /opt/dudel/dudel/static/gen
+    chown www-data:nogroup /opt/dudel/dudel/static/.webassets-cache
+    chown www-data:nogroup /opt/dudel/dudel/static/gen
     
     apt-get -y purge yui-compressor git python-pip make gcc python-dev
     apt-get -y autoremove
