@@ -12,8 +12,8 @@ acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base-system
 
 acbuild run -- /bin/sh -es <<"EOF"
-    usermod -u 2004 -g nogroup www-data
-    apt-get -y --no-install-recommends install wget uwsgi uwsgi-plugin-python python python-virtualenv python-pip virtualenv yui-compressor make git python-bleach python-creoleparser python-django-auth-ldap python-pil python-psycopg2 python-gpgme python-pygraphviz python-pypdf2 python-ldap python-magic python-requests gettext
+    usermod -u 2004 -g nogroup -d /opt/dashboard www-data
+    apt-get -y --no-install-recommends install wget uwsgi uwsgi-plugin-python python python-virtualenv python-pip virtualenv yui-compressor make git python-bleach python-creoleparser python-django-auth-ldap python-pil python-psycopg2 python-gpgme python-pygraphviz python-pypdf2 python-ldap python-magic python-requests gettext gcc python-dev libldap2-dev libsasl2-dev
 
     cd /opt
     wget -nv https://github.com/fsinfuhh/mafiasi/archive/feature_cml.tar.gz -O- | tar -xz
@@ -31,7 +31,7 @@ acbuild run -- /bin/sh -es <<"EOF"
 
     ln -sf /opt/config/settings.py /opt/dashboard/mafiasi/settings.py
     ln -sf /opt/storage/media /opt/dashboard/_media
-    apt-get -y purge yui-compressor git python-pip make
+    apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-dev libsasl2-dev
     apt-get -y autoremove
     apt-get clean
 
