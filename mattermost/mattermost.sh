@@ -14,7 +14,7 @@ acbuild dependency add rkt.mafiasi.de/base-system
 acbuild run -- /bin/sh -es <<"EOF"
     usermod -u 2003 -g nogroup www-data
     apt-get -y --no-install-recommends install wget
-    wget -nv https://releases.mattermost.com/3.0.2/mattermost-team-3.0.2-linux-amd64.tar.gz -O- | tar -C /opt -xz
+    wget -nv https://releases.mattermost.com/3.2.0/mattermost-team-3.2.0-linux-amd64.tar.gz -O- | tar -C /opt -xz
     chown -R www-data:nogroup /opt/mattermost
 
     ln -sf /opt/config/config.json /opt/mattermost/config/config.json
