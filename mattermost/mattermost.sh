@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.05.24
+VERSION=2016.07.28
 NAME=mattermost
 IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
@@ -12,9 +12,11 @@ acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base-system
 
 acbuild run -- /bin/sh -es <<"EOF"
+    VERSION=3.2.0
     usermod -u 2003 -g nogroup www-data
     apt-get -y --no-install-recommends install wget
-    wget -nv https://releases.mattermost.com/3.2.0/mattermost-team-3.2.0-linux-amd64.tar.gz -O- | tar -C /opt -xz
+    wget -nv https://releases.mattermost.com/$VERSION/mattermost-team-$VERSION-linux-amd64.tar.gz -O- | tar -C /opt -xz
+    sed -i 's/"login.gitlab":"GitLab"/"login.gitlab":"Login"/' /opt/mattermost/webapp/dist/bundle-$VERSION.js
     chown -R www-data:nogroup /opt/mattermost
 
     ln -sf /opt/config/config.json /opt/mattermost/config/config.json
