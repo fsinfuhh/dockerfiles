@@ -1,5 +1,7 @@
 #! /bin/bash
 
+VERSION=3.1.4
+
 NAME=sogo
 
 . ../acbuildhelper.sh
@@ -7,17 +9,36 @@ NAME=sogo
 acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base
 
-acbuild run -- /bin/sh -es <<"EOF"
+acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     adduser --disabled-login --gecos 'Sogo' --uid 2007 --ingroup nogroup sogo
-    echo deb http://inverse.ca/debian-v3 jessie jessie >> /etc/apt/sources.list
-    apt-key adv --keyserver keys.gnupg.net --recv-key 0x19CDA6A9810273C4
     apt update
-    apt-get --no-install-recommends -y install sogo sope4.9-gdl1-postgresql uwsgi memcached
-    apt-get clean
+    apt-get --no-install-recommends -y install uwsgi memcached gnustep-make gnustep-base-runtime libgnustep-base-dev gobjc libxml2-dev libldap2-dev libssl-dev zlib1g-dev libpq-dev libmemcached-dev postgresql-client libcurl4-openssl-dev wget make
 
-    install -o sogo -g nogroup -m 750 -d /var/spool/sogo
-    chown sogo:nogroup /etc/sogo
+    mkdir /build && cd /build
+    wget -q https://github.com/inverse-inc/sope/archive/SOPE-$VERSION.tar.gz -O- | tar -xz
+    cd sope-SOPE-$VERSION
+    ./configure --with-gnustep --disable-mysql
+    make; make install
+
+    cd /build
+
+    wget -q https://github.com/inverse-inc/sogo/archive/SOGo-$VERSION.tar.gz -O- | tar -xz
+    cd sogo-SOGo-$VERSION
+    ./configure
+    make; make install
+
+    cd /
+    rm -r /build
+
+    apt-get -y remove wget make
+    apt-get clean
+    apt-get autoclean
+
+    install -o sogo -g nogroup -m 750 -d /var/spool/sogo /etc/sogo
     ln -sf /opt/config/sogo.conf /etc/sogo/sogo.conf
+    echo /usr/local/lib > /etc/ld.so.conf.d/sogo.conf
+    echo /usr/local/lib/sogo > /etc/ld.so.conf.d/sogo.conf
+    ldconfig
 
     cat > /usr/local/bin/run <<"EOG"
 #!/bin/sh -e
