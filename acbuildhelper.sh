@@ -22,7 +22,9 @@ acbuild () {
 
 acbuildend () {
     export EXIT=$?;
-    acbuild end && exit $EXIT;
+    acbuild end
+    rmdir $T >/dev/null || :
+    exit $EXIT;
 }
 
 acbuild begin
