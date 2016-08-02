@@ -15,7 +15,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     adduser --disabled-login --gecos 'Gogs' --uid 2001 --ingroup nogroup gogs
     echo deb http://ftp.de.debian.org/debian jessie-backports main >> /etc/apt/sources.list
     apt update
-    apt-get --no-install-recommends -y install golang/jessie-backports golang-go/jessie-backports golang-src/jessie-backports git openssl ca-certificates openssh-client openssh-server
+    apt-get --no-install-recommends -y install golang/jessie-backports golang-go/jessie-backports golang-src/jessie-backports golang-doc/jessie-backports git openssl ca-certificates openssh-client openssh-server
 
     su -c 'sh -s' gogs <<"EOG"
     cd
