@@ -1,7 +1,11 @@
 set -e
 
+if [[ -z $IMAGE_NAME ]]; then
+    export IMAGE_NAME=$NAME-$VERSION-$(date -Is)-linux-amd64.aci
+fi
+
 if [[ $EUID -ne 0 ]]; then
-    sudo $0 --secret "$@"
+    sudo -E $0 --secret "$@"
     rm -f $IMAGE_NAME.asc
     gpg --armor --output $IMAGE_NAME.asc --detach-sign $IMAGE_NAME
     exit 0
