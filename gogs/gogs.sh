@@ -1,8 +1,7 @@
 #! /bin/bash
 
-VERSION=2016.05.24
+VERSION=2016.08.02
 NAME=gogs
-IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
 . ../acbuildhelper.sh
 
