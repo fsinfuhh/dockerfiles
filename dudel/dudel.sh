@@ -1,6 +1,7 @@
 #! /bin/bash
 
-VERSION=2016.08.02
+GIT_HASH=$(wget -q --header="Accept: application/vnd.github.v3.sha" -O- https://api.github.com/repos/opatut/dudel/commits/heads/hotfix | cut -b 1-6)
+VERSION=2016.08.02-$GIT_HASH
 NAME=dudel
 
 . ../acbuildhelper.sh

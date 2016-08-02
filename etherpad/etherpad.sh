@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=2016.08.02
+VERSION=$(wget -qO- https://raw.githubusercontent.com/ether/etherpad-lite/master/src/package.json | grep "version" | grep -oE "[0-9]+(\.[0-9]+)*")
 NAME=etherpad
 
 . ../acbuildhelper.sh
