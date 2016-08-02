@@ -1,22 +1,19 @@
 #! /bin/bash
 
-VERSION=2016.05.24
+VERSION=8.2
 NAME=owncloud
-IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
 . ../acbuildhelper.sh
 
-echo "Building $IMAGE_NAME"
-
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base-system
+acbuild dependency add rkt.mafiasi.de/base
 
-acbuild run -- /bin/sh -es <<"EOF"
+acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     usermod -u 2002 -g nogroup www-data
     apt-get -y --no-install-recommends install wget uwsgi uwsgi-plugin-php php5 php5-gd php5-intl php5-mcrypt php5-pgsql php5-apcu php5-curl php5-memcache php5-redis php5-ldap
 
-    wget -nv https://download.owncloud.org/download/repositories/8.2/Debian_8.0/Release.key -O- | apt-key add -
-    echo 'deb http://download.owncloud.org/download/repositories/8.2/Debian_8.0/ /' > /etc/apt/sources.list.d/owncloud.list
+    wget -nv https://download.owncloud.org/download/repositories/$VERSION/Debian_8.0/Release.key -O- | apt-key add -
+    echo deb http://download.owncloud.org/download/repositories/$VERSION/Debian_8.0/ / > /etc/apt/sources.list.d/owncloud.list
     apt update
     apt -y install owncloud-files
     apt-get clean

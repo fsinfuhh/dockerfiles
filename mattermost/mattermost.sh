@@ -1,18 +1,14 @@
 #! /bin/bash
 
-VERSION=2016.07.28
+VERSION=3.2.0
 NAME=mattermost
-IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
 . ../acbuildhelper.sh
 
-echo "Building $IMAGE_NAME"
-
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base-system
+acbuild dependency add rkt.mafiasi.de/base
 
-acbuild run -- /bin/sh -es <<"EOF"
-    VERSION=3.2.0
+acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     usermod -u 2003 -g nogroup www-data
     apt-get -y --no-install-recommends install wget
     wget -nv https://releases.mattermost.com/$VERSION/mattermost-team-$VERSION-linux-amd64.tar.gz -O- | tar -C /opt -xz

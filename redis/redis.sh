@@ -1,15 +1,11 @@
 #! /bin/bash
 
-VERSION=2016.05.24
 NAME=redis
-IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
 . ../acbuildhelper.sh
 
-echo "Building $IMAGE_NAME"
-
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base-system
+acbuild dependency add rkt.mafiasi.de/base
 
 acbuild run -- /bin/sh -es <<"EOF"
     apt-get -y --no-install-recommends install redis-server

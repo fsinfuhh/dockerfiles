@@ -1,15 +1,11 @@
 #! /bin/bash
 
-VERSION=2016.06.16-2
 NAME=sogo
-IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
 
 . ../acbuildhelper.sh
 
-echo "Building $IMAGE_NAME"
-
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base-system
+acbuild dependency add rkt.mafiasi.de/base
 
 acbuild run -- /bin/sh -es <<"EOF"
     adduser --disabled-login --gecos 'Sogo' --uid 2007 --ingroup nogroup sogo

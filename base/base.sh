@@ -1,12 +1,9 @@
 #!/bin/bash
 
-VERSION=2016.05.24
-NAME=base-system
-IMAGE_NAME=$NAME-$VERSION-linux-amd64.aci
+NAME=base
 
-. acbuildhelper.sh
+. ../acbuildhelper.sh
 
-echo "Building $IMAGE_NAME"
 acbuild set-name rkt.mafiasi.de/$NAME
 debootstrap --variant=minbase jessie $T/.acbuild/currentaci/rootfs http://ftp.de.debian.org/debian/
 

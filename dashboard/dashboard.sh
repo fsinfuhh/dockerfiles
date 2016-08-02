@@ -6,10 +6,8 @@ NAME=dashboard
 
 . ../acbuildhelper.sh
 
-echo "Building $IMAGE_NAME"
-
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base-system
+acbuild dependency add rkt.mafiasi.de/base
 
 acbuild run -- /bin/sh -es <<"EOF"
     usermod -u 2004 -g nogroup -d /opt/dashboard www-data

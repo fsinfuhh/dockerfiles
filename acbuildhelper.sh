@@ -1,7 +1,9 @@
 set -e
 
 if [[ -z $IMAGE_NAME ]]; then
-    export IMAGE_NAME=$NAME-$VERSION-$(git describe --dirty --always --tags)-$(date -Is)-linux-amd64.aci
+    export IMAGE_NAME=$NAME-${VERSION+$VERSION-}$(git describe --dirty --always --tags)-$(date -Is)-linux-amd64.aci
+elif
+    echo "Building $IMAGE_NAME"
 fi
 
 if [[ $EUID -ne 0 ]]; then
