@@ -5,11 +5,8 @@ In diesem Git werden die Skripte zum Bauen der mafiasi-Container gesammelt.
 `base` ist das Basis-Image. Dieses besteht aus einem minimalen Debian
 Jessie mit vim.
 
-Alle Image werden mit `acbuild` gebaut und liegen im aci-Format vor.
-
-Zur Zeit muss `acbuild ≤ v0.3.1` mit dem Patch
-`0001-Pipe-stdin-to-the-stdin-of-the-command-in-the-ACI.patch` gebaut werden.
-Alternativ einfach den `master`-Branch kompilieren.
+Alle Image werden mit `acbuild` gebaut und liegen im aci-Format vor. Es wird
+`acbuild ≥ 0.4.0` benötigt.
 
 ## Container
 
