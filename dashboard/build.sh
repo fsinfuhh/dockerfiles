@@ -20,7 +20,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     cd dashboard
     . .pyenv/bin/activate
     pip install -r requirements.txt
-    pip install -U 'Django<1.9'
+    pip install -U 'Django<1.11'
     pip install django-ldapdb
     make
     mv mafiasi/settings.py.example mafiasi/settings.py
