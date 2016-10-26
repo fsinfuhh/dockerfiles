@@ -14,7 +14,7 @@ for ARG; do
         exit 1
     fi
     BASENAME=$(basename $ARG)
-    LATEST=$(sed -r 's,^([^-]+)-(.*)((-[^-]+){2}\.aci)$,\1-latest\3,' <<< $BASENAME)
+    LATEST=$(sed -r 's,^([^:]+):(.*)((-[^-]+){2}\.aci)$,\1-latest\3,' <<< $BASENAME)
     sftp -b - fs4:/srv/data/rkt.mafiasi.de/images/rkt.mafiasi.de <<EOF
 progress
 put $ARG
