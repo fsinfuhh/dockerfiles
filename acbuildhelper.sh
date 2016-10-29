@@ -7,7 +7,7 @@ else
 fi
 
 if [[ $EUID -ne 0 ]]; then
-    sudo -E $0 --secret "$@"
+    sudo ${TMPDIR+TMPDIR=$TMPDIR}  $0 --secret "$@"
     rm -f $IMAGE_NAME.asc
     gpg --armor --output $IMAGE_NAME.asc --detach-sign $IMAGE_NAME
     exit 0
