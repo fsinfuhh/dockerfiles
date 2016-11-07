@@ -10,6 +10,8 @@ acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base
 
 acbuild copy ldap-avatar-duplication-hotfix.patch /ldap-avatar-duplication-hotfix.patch
+acbuild copy avatar-relocate.patch /avatar-relocate.patch
+acbuild copy hidden-files-hide-content.patch /hidden-files-hide-content.patch
 acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     usermod -u 2002 -g nogroup www-data
     apt-get -y --no-install-recommends install wget php5-fpm php5 php5-gd php5-intl php5-mcrypt php5-pgsql php5-apcu php5-curl php5-memcache php5-redis php5-ldap patch
@@ -21,6 +23,8 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     apt-get clean
     cd /var/www/owncloud
     patch -p1 < /ldap-avatar-duplication-hotfix.patch
+    patch -p1 < /avatar-relocate.patch
+    patch -p1 < /hidden-files-hide-content.patch
 
     ln -sf /opt/config/config.php /var/www/owncloud/config/config.php
     ln -sf /opt/config/www.conf /etc/php5/fpm/pool.d/www.conf
