@@ -1,0 +1,694 @@
+From bd5ae40f81884ef4dff533107bde97483b2e980c Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Fri, 12 Aug 2016 17:36:54 +0200
+Subject: [PATCH 01/10] Store avatars outside of the home
+
+Inside a hidden "metadata-avatars" folder.
+Doesn't require home FS setup
+---
+ lib/private/AvatarManager.php                |  20 ++--
+ lib/private/Encryption/Util.php              |   3 +
+ lib/private/Repair.php                       |   6 ++
+ lib/private/Repair/MoveAvatarOutsideHome.php | 132 +++++++++++++++++++++++++++
+ version.php                                  |   2 +-
+ 5 files changed, 153 insertions(+), 10 deletions(-)
+ create mode 100644 lib/private/Repair/MoveAvatarOutsideHome.php
+
+diff --git a/lib/private/AvatarManager.php b/lib/private/AvatarManager.php
+index 0f64f84..7590ba1 100644
+--- a/lib/private/AvatarManager.php
++++ b/lib/private/AvatarManager.php
+@@ -84,15 +84,17 @@ public function getAvatar($userId) {
+ 			throw new \Exception('user does not exist');
+ 		}
+ 
+-		/*
+-		 * Fix for #22119
+-		 * Basically we do not want to copy the skeleton folder
+-		 */
+-		\OC\Files\Filesystem::initMountPoints($userId);
+-		$dir = '/' . $userId;
+-		/** @var Folder $folder */
+-		$folder = $this->rootFolder->get($dir);
++		$avatarsFolder = $this->getFolder($this->rootFolder, 'metadata-avatars');
++		$usersAvatarsFolder = $this->getFolder($avatarsFolder, $userId);
+ 
+-		return new Avatar($folder, $this->l, $user, $this->logger);
++		return new Avatar($usersAvatarsFolder, $this->l, $user, $this->logger);
++	}
++
++	private function getFolder(Folder $folder, $path) {
++		try {
++			return $folder->get($path);
++		} catch (NotFoundException $e) {
++			return $folder->newFolder($path);
++		}
+ 	}
+ }
+diff --git a/lib/private/Encryption/Util.php b/lib/private/Encryption/Util.php
+index 2451b17..64fc2f7 100644
+--- a/lib/private/Encryption/Util.php
++++ b/lib/private/Encryption/Util.php
+@@ -96,6 +96,9 @@ public function __construct(
+ 		$this->config = $config;
+ 
+ 		$this->excludedPaths[] = 'files_encryption';
++		$this->excludedPaths[] = 'metadata-avatars';
++		$this->excludedPaths[] = 'avatar.png';
++		$this->excludedPaths[] = 'avatar.jpg';
+ 	}
+ 
+ 	/**
+diff --git a/lib/private/Repair.php b/lib/private/Repair.php
+index 036ba13..2abeb23 100644
+--- a/lib/private/Repair.php
++++ b/lib/private/Repair.php
+@@ -54,6 +54,7 @@
+ use OCP\Migration\IRepairStep;
+ use Symfony\Component\EventDispatcher\EventDispatcher;
+ use Symfony\Component\EventDispatcher\GenericEvent;
++use OC\Repair\MoveAvatarOutsideHome;
+ 
+ class Repair implements IOutput{
+ 	/* @var IRepairStep[] */
+@@ -139,6 +140,11 @@ public static function getRepairSteps() {
+ 			new SharePropagation(\OC::$server->getConfig()),
+ 			new RemoveOldShares(\OC::$server->getDatabaseConnection()),
+ 			new AvatarPermissions(\OC::$server->getDatabaseConnection()),
++			new MoveAvatarOutsideHome(
++				\OC::$server->getConfig(),
++				\OC::$server->getDatabaseConnection(),
++				\OC::$server->getUserManager()
++			),
+ 			new RemoveRootShares(\OC::$server->getDatabaseConnection(), \OC::$server->getUserManager(), \OC::$server->getLazyRootFolder()),
+ 			new RepairUnmergedShares(
+ 				\OC::$server->getConfig(),
+diff --git a/lib/private/Repair/MoveAvatarOutsideHome.php b/lib/private/Repair/MoveAvatarOutsideHome.php
+new file mode 100644
+index 0000000..c67729f
+--- /dev/null
++++ b/lib/private/Repair/MoveAvatarOutsideHome.php
+@@ -0,0 +1,132 @@
++<?php
++/**
++ * @author Vincent Petry <pvince81@owncloud.com>
++ *
++ * @copyright Copyright (c) 2016, ownCloud, Inc.
++ * @license AGPL-3.0
++ *
++ * This code is free software: you can redistribute it and/or modify
++ * it under the terms of the GNU Affero General Public License, version 3,
++ * as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU Affero General Public License for more details.
++ *
++ * You should have received a copy of the GNU Affero General Public License, version 3,
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>
++ *
++ */
++namespace OC\Repair;
++
++use OCP\IDBConnection;
++use OCP\Migration\IOutput;
++use OCP\Migration\IRepairStep;
++use OCP\IUser;
++use OC\Avatar;
++use OCP\IConfig;
++use OCP\Files\Folder;
++
++/**
++ * Move avatars outside of their homes to the new location
++ *
++ * @package OC\Repair
++ */
++class MoveAvatarOutsideHome implements IRepairStep {
++	/** @var \OCP\IConfig */
++	protected $config;
++
++	/** @var IDBConnection */
++	private $connection;
++
++	/** @var IUserManager */
++	private $userManager;
++
++	/**
++	 * @param IConfig $config config
++	 * @param IDBConnection $connection database connection
++	 * @param IUserManager $userManager user manager
++	 */
++	public function __construct(
++		IConfig $config,
++		IDBConnection $connection,
++		IUserManager $userManager
++	) {
++		$this->config = $config;
++		$this->connection = $connection;
++		$this->userManager = $userManager;
++	}
++
++	/**
++	 * @return string
++	 */
++	public function getName() {
++		return 'Move user avatars outside the homes to the new location';
++	}
++
++	/**
++	 * Move avatars outside of their homes
++	 */
++	private function moveAvatars(IOutput $out, IUser $user, Folder $newAvatarsFolder) {
++		$userId = $user->getUID();
++
++		\OC\Files\Filesystem::initMountPoints($userId);
++
++		// TODO: inject
++		$rootFolder = \OC::$server->getRootFolder();
++
++		$oldAvatarUserFolder = $rootFolder->get('/' . $userId);
++		$oldAvatar = new Avatar($oldAvatarUserFolder, $this->l, $user, $this->logger);
++		if ($oldAvatar->exists()) {
++			$newAvatarsUserFolder = $newAvatarsFolder->newFolder($userId);
++
++			// get original file
++			$oldAvatarFile = $oldAvatar->getFile(-1);
++			$oldAvatarFile->move($newAvatarsUserFolder->getPath() . '/' . $oldAvatarFile->getName());
++			$oldAvatar->remove();
++		}
++
++		\OC_Util::tearDownFS();
++	}
++
++	/**
++	 * Count all the users
++	 *
++	 * @return int
++	 */
++	private function countUsers() {
++		$allCount = $this->userManager->countUsers();
++
++		$totalCount = 0;
++		foreach ($allCount as $backend => $count) {
++			$totalCount += $count;
++		}
++
++		return $totalCount;
++	}
++
++	/**
++	 * @param IOutput $output
++	 */
++	public function run(IOutput $output) {
++		$ocVersionFromBeforeUpdate = $this->config->getSystemValue('version', '0.0.0');
++		if (version_compare($ocVersionFromBeforeUpdate, '9.1.1.1', '<')) {
++			$rootFolder = \OC::$server->getRootFolder();
++			$newAvatarsFolder = $rootFolder->newFolder('metadata-avatars');
++
++			$function = function(IUser $user) use ($output, $newAvatarsFolder) {
++				$this->moveAvatars($output, $user, $newAvatarsFolder);
++				$output->advance();
++			};
++
++			$userCount = $this->countUsers();
++			$output->startProgress($userCount);
++
++			$this->userManager->callForAllUsers($function);
++
++			$output->finishProgress();
++		}
++	}
++}
++
+diff --git a/version.php b/version.php
+index 099b51a..0d61a3c 100644
+--- a/version.php
++++ b/version.php
+@@ -23,7 +23,7 @@
+ // We only can count up. The 4. digit is only for the internal patchlevel to trigger DB upgrades
+ // between betas, final and RCs. This is _not_ the public version number. Reset minor/patchlevel
+ // when updating major/minor version number.
+-$OC_Version = array(9, 2, 0, 1);
++$OC_Version = array(9, 2, 0, 2);
+ 
+ // The human readable string
+ $OC_VersionString = '9.2.0 pre alpha';
+
+From 6ffe67c8df29f84170118a8e570f228c21215ec7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20M=C3=BCller?= <thomas.mueller@tmit.eu>
+Date: Thu, 22 Sep 2016 13:07:10 +0200
+Subject: [PATCH 02/10] Fix it
+
+---
+ lib/private/Repair.php                       |  4 +++-
+ lib/private/Repair/MoveAvatarOutsideHome.php | 15 ++++++++++++++-
+ 2 files changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/lib/private/Repair.php b/lib/private/Repair.php
+index 2abeb23..a6e66f6 100644
+--- a/lib/private/Repair.php
++++ b/lib/private/Repair.php
+@@ -143,7 +143,9 @@ public static function getRepairSteps() {
+ 			new MoveAvatarOutsideHome(
+ 				\OC::$server->getConfig(),
+ 				\OC::$server->getDatabaseConnection(),
+-				\OC::$server->getUserManager()
++				\OC::$server->getUserManager(),
++				\OC::$server->getL10N('core'),
++				\OC::$server->getLogger()
+ 			),
+ 			new RemoveRootShares(\OC::$server->getDatabaseConnection(), \OC::$server->getUserManager(), \OC::$server->getLazyRootFolder()),
+ 			new RepairUnmergedShares(
+diff --git a/lib/private/Repair/MoveAvatarOutsideHome.php b/lib/private/Repair/MoveAvatarOutsideHome.php
+index c67729f..4c80b31 100644
+--- a/lib/private/Repair/MoveAvatarOutsideHome.php
++++ b/lib/private/Repair/MoveAvatarOutsideHome.php
+@@ -21,6 +21,9 @@
+ namespace OC\Repair;
+ 
+ use OCP\IDBConnection;
++use OCP\IL10N;
++use OCP\ILogger;
++use OCP\IUserManager;
+ use OCP\Migration\IOutput;
+ use OCP\Migration\IRepairStep;
+ use OCP\IUser;
+@@ -43,6 +46,12 @@ class MoveAvatarOutsideHome implements IRepairStep {
+ 	/** @var IUserManager */
+ 	private $userManager;
+ 
++	/** @var \OCP\ILogger */
++	private $logger;
++
++	/** @var \OCP\IL10N */
++	private $l;
++
+ 	/**
+ 	 * @param IConfig $config config
+ 	 * @param IDBConnection $connection database connection
+@@ -51,11 +60,15 @@ class MoveAvatarOutsideHome implements IRepairStep {
+ 	public function __construct(
+ 		IConfig $config,
+ 		IDBConnection $connection,
+-		IUserManager $userManager
++		IUserManager $userManager,
++		IL10N $l10n,
++		ILogger $logger
+ 	) {
+ 		$this->config = $config;
+ 		$this->connection = $connection;
+ 		$this->userManager = $userManager;
++		$this->l = $l10n;
++		$this->logger = $logger;
+ 	}
+ 
+ 	/**
+
+From 72f1d8dfe0b372dede1a32a236051701b4b239ba Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20M=C3=BCller?= <thomas.mueller@tmit.eu>
+Date: Mon, 26 Sep 2016 13:01:43 +0200
+Subject: [PATCH 03/10] Store avatars in e.g. a/d/admin, using md5 on non
+ alphanumeric characters and refactor tests
+
+---
+ lib/private/AvatarManager.php   | 32 +++++++++++++++++++---
+ tests/lib/AvatarManagerTest.php | 59 +++++++++++++++++++++++++++++++----------
+ 2 files changed, 73 insertions(+), 18 deletions(-)
+
+diff --git a/lib/private/AvatarManager.php b/lib/private/AvatarManager.php
+index 7590ba1..ebc29f8 100644
+--- a/lib/private/AvatarManager.php
++++ b/lib/private/AvatarManager.php
+@@ -84,10 +84,8 @@ public function getAvatar($userId) {
+ 			throw new \Exception('user does not exist');
+ 		}
+ 
+-		$avatarsFolder = $this->getFolder($this->rootFolder, 'metadata-avatars');
+-		$usersAvatarsFolder = $this->getFolder($avatarsFolder, $userId);
+-
+-		return new Avatar($usersAvatarsFolder, $this->l, $user, $this->logger);
++		$avatarsFolder = $this->getAvatarFolder($userId);
++		return new Avatar($avatarsFolder, $this->l, $user, $this->logger);
+ 	}
+ 
+ 	private function getFolder(Folder $folder, $path) {
+@@ -97,4 +95,30 @@ private function getFolder(Folder $folder, $path) {
+ 			return $folder->newFolder($path);
+ 		}
+ 	}
++
++	private function buildAvatarPath($userId) {
++		$prefix = $userId;
++		if (strlen($userId) < 2 || !ctype_alnum($userId[0]) || !ctype_alnum($userId[1])) {
++			$prefix = md5($userId);
++		}
++
++		return [
++			$prefix[0],
++			$prefix[1],
++			$userId,
++		];
++	}
++
++	/**
++	 * @param $userId
++	 * @return Folder|\OCP\Files\Node
++	 */
++	protected function getAvatarFolder($userId) {
++		$avatarsFolder = $this->getFolder($this->rootFolder, 'avatars');
++		$parts = $this->buildAvatarPath($userId);
++		foreach ($parts as $part) {
++			$avatarsFolder = $this->getFolder($avatarsFolder, $part);
++		}
++		return $avatarsFolder;
++	}
+ }
+
+From aabe162a6e7acecc724b593820532f667951fa6a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20M=C3=BCller?= <thomas.mueller@tmit.eu>
+Date: Mon, 26 Sep 2016 15:58:04 +0200
+Subject: [PATCH 04/10] Always do an md5 of the user name
+
+---
+ lib/private/AvatarManager.php   | 12 ++----------
+ tests/lib/AvatarManagerTest.php |  7 ++++---
+ 2 files changed, 6 insertions(+), 13 deletions(-)
+
+diff --git a/lib/private/AvatarManager.php b/lib/private/AvatarManager.php
+index ebc29f8..bd12586 100644
+--- a/lib/private/AvatarManager.php
++++ b/lib/private/AvatarManager.php
+@@ -97,16 +97,8 @@ private function getFolder(Folder $folder, $path) {
+ 	}
+ 
+ 	private function buildAvatarPath($userId) {
+-		$prefix = $userId;
+-		if (strlen($userId) < 2 || !ctype_alnum($userId[0]) || !ctype_alnum($userId[1])) {
+-			$prefix = md5($userId);
+-		}
+-
+-		return [
+-			$prefix[0],
+-			$prefix[1],
+-			$userId,
+-		];
++		$avatar = substr_replace(substr_replace(md5($userId), '/', 4, 0), '/', 2, 0);
++		return explode('/', $avatar);
+ 	}
+ 
+ 	/**
+
+From a0faaf6dd83fb42211f8dbef3f84cf6c4dbf512c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20M=C3=BCller?=
+ <DeepDiver1975@users.noreply.github.com>
+Date: Tue, 27 Sep 2016 11:28:39 +0200
+Subject: [PATCH 05/10] Update Util.php
+
+---
+ lib/private/Encryption/Util.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/private/Encryption/Util.php b/lib/private/Encryption/Util.php
+index 64fc2f7..006ca31 100644
+--- a/lib/private/Encryption/Util.php
++++ b/lib/private/Encryption/Util.php
+@@ -96,7 +96,7 @@ public function __construct(
+ 		$this->config = $config;
+ 
+ 		$this->excludedPaths[] = 'files_encryption';
+-		$this->excludedPaths[] = 'metadata-avatars';
++		$this->excludedPaths[] = 'avatars';
+ 		$this->excludedPaths[] = 'avatar.png';
+ 		$this->excludedPaths[] = 'avatar.jpg';
+ 	}
+
+From 067ebe0ff62a455016f71ba4de39ecbbd9b1fc4d Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Tue, 27 Sep 2016 11:55:30 +0200
+Subject: [PATCH 06/10] Adjust avatar migration version check
+
+---
+ lib/private/Repair/MoveAvatarOutsideHome.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/private/Repair/MoveAvatarOutsideHome.php b/lib/private/Repair/MoveAvatarOutsideHome.php
+index 4c80b31..214bc61 100644
+--- a/lib/private/Repair/MoveAvatarOutsideHome.php
++++ b/lib/private/Repair/MoveAvatarOutsideHome.php
+@@ -124,7 +124,7 @@ private function countUsers() {
+ 	 */
+ 	public function run(IOutput $output) {
+ 		$ocVersionFromBeforeUpdate = $this->config->getSystemValue('version', '0.0.0');
+-		if (version_compare($ocVersionFromBeforeUpdate, '9.1.1.1', '<')) {
++		if (version_compare($ocVersionFromBeforeUpdate, '9.2.0.2', '<')) {
+ 			$rootFolder = \OC::$server->getRootFolder();
+ 			$newAvatarsFolder = $rootFolder->newFolder('metadata-avatars');
+ 
+
+From d0ad838a644d01a6fbbf6b4797bf411b0f4e583f Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Tue, 27 Sep 2016 12:33:13 +0200
+Subject: [PATCH 07/10] Fix LazyRoot folder to properly return get() value
+
+---
+ lib/private/Files/Node/LazyRoot.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/private/Files/Node/LazyRoot.php b/lib/private/Files/Node/LazyRoot.php
+index f317208..d2b11fb 100644
+--- a/lib/private/Files/Node/LazyRoot.php
++++ b/lib/private/Files/Node/LazyRoot.php
+@@ -138,7 +138,7 @@ public function unMount($mount) {
+ 	 * @inheritDoc
+ 	 */
+ 	public function get($path) {
+-		$this->__call(__FUNCTION__, func_get_args());
++		return $this->__call(__FUNCTION__, func_get_args());
+ 	}
+ 
+ 	/**
+
+From 9ed0a76ac75080ca6c757b05d34a31412a8f852b Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Tue, 27 Sep 2016 12:38:07 +0200
+Subject: [PATCH 08/10] Fix avatar migration with the new folder
+
+---
+ lib/private/AvatarManager.php                |  8 ++++++--
+ lib/private/Repair.php                       |  2 ++
+ lib/private/Repair/MoveAvatarOutsideHome.php | 26 ++++++++++++++++----------
+ 3 files changed, 24 insertions(+), 12 deletions(-)
+
+diff --git a/lib/private/AvatarManager.php b/lib/private/AvatarManager.php
+index bd12586..184a244 100644
+--- a/lib/private/AvatarManager.php
++++ b/lib/private/AvatarManager.php
+@@ -102,10 +102,14 @@ private function buildAvatarPath($userId) {
+ 	}
+ 
+ 	/**
+-	 * @param $userId
++	 * Returns the avatar folder for the given user
++	 *
++	 * @param $userId user id
+ 	 * @return Folder|\OCP\Files\Node
++	 *
++	 * @internal
+ 	 */
+-	protected function getAvatarFolder($userId) {
++	public function getAvatarFolder($userId) {
+ 		$avatarsFolder = $this->getFolder($this->rootFolder, 'avatars');
+ 		$parts = $this->buildAvatarPath($userId);
+ 		foreach ($parts as $part) {
+diff --git a/lib/private/Repair.php b/lib/private/Repair.php
+index a6e66f6..3184140 100644
+--- a/lib/private/Repair.php
++++ b/lib/private/Repair.php
+@@ -144,6 +144,8 @@ public static function getRepairSteps() {
+ 				\OC::$server->getConfig(),
+ 				\OC::$server->getDatabaseConnection(),
+ 				\OC::$server->getUserManager(),
++				\OC::$server->getAvatarManager(),
++				\OC::$server->getLazyRootFolder(),
+ 				\OC::$server->getL10N('core'),
+ 				\OC::$server->getLogger()
+ 			),
+diff --git a/lib/private/Repair/MoveAvatarOutsideHome.php b/lib/private/Repair/MoveAvatarOutsideHome.php
+index 214bc61..36083c0 100644
+--- a/lib/private/Repair/MoveAvatarOutsideHome.php
++++ b/lib/private/Repair/MoveAvatarOutsideHome.php
+@@ -30,6 +30,7 @@
+ use OC\Avatar;
+ use OCP\IConfig;
+ use OCP\Files\Folder;
++use OCP\IAvatarManager;
+ 
+ /**
+  * Move avatars outside of their homes to the new location
+@@ -46,6 +47,12 @@ class MoveAvatarOutsideHome implements IRepairStep {
+ 	/** @var IUserManager */
+ 	private $userManager;
+ 
++	/** @var IAvatarManager */
++	private $avatarManager;
++
++	/** @var IRootFolder */
++	private $rootFolder;
++
+ 	/** @var \OCP\ILogger */
+ 	private $logger;
+ 
+@@ -61,12 +68,16 @@ public function __construct(
+ 		IConfig $config,
+ 		IDBConnection $connection,
+ 		IUserManager $userManager,
++		IAvatarManager $avatarManager,
++		IRootFolder $rootFolder,
+ 		IL10N $l10n,
+ 		ILogger $logger
+ 	) {
+ 		$this->config = $config;
+ 		$this->connection = $connection;
+ 		$this->userManager = $userManager;
++		$this->avatarManager = $avatarManager;
++		$this->rootFolder = $rootFolder;
+ 		$this->l = $l10n;
+ 		$this->logger = $logger;
+ 	}
+@@ -86,13 +97,11 @@ private function moveAvatars(IOutput $out, IUser $user, Folder $newAvatarsFolder
+ 
+ 		\OC\Files\Filesystem::initMountPoints($userId);
+ 
+-		// TODO: inject
+-		$rootFolder = \OC::$server->getRootFolder();
+-
+-		$oldAvatarUserFolder = $rootFolder->get('/' . $userId);
++		// call get instead of getUserFolder to avoid needless skeleton copy
++		$oldAvatarUserFolder = $this->rootFolder->get('/' . $userId);
+ 		$oldAvatar = new Avatar($oldAvatarUserFolder, $this->l, $user, $this->logger);
+ 		if ($oldAvatar->exists()) {
+-			$newAvatarsUserFolder = $newAvatarsFolder->newFolder($userId);
++			$newAvatarsUserFolder = $this->avatarManager->getAvatarFolder($userId);
+ 
+ 			// get original file
+ 			$oldAvatarFile = $oldAvatar->getFile(-1);
+@@ -125,11 +134,8 @@ private function countUsers() {
+ 	public function run(IOutput $output) {
+ 		$ocVersionFromBeforeUpdate = $this->config->getSystemValue('version', '0.0.0');
+ 		if (version_compare($ocVersionFromBeforeUpdate, '9.2.0.2', '<')) {
+-			$rootFolder = \OC::$server->getRootFolder();
+-			$newAvatarsFolder = $rootFolder->newFolder('metadata-avatars');
+-
+-			$function = function(IUser $user) use ($output, $newAvatarsFolder) {
+-				$this->moveAvatars($output, $user, $newAvatarsFolder);
++			$function = function(IUser $user) use ($output) {
++				$this->moveAvatars($output, $user);
+ 				$output->advance();
+ 			};
+ 
+
+From cba3193fa82b642178c5b6be4ec5c7e961f94364 Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Tue, 27 Sep 2016 13:13:32 +0200
+Subject: [PATCH 09/10] Don't fail move avatar step if user has no home at all
+
+---
+ lib/private/Repair/MoveAvatarOutsideHome.php | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/lib/private/Repair/MoveAvatarOutsideHome.php b/lib/private/Repair/MoveAvatarOutsideHome.php
+index 36083c0..6420a91 100644
+--- a/lib/private/Repair/MoveAvatarOutsideHome.php
++++ b/lib/private/Repair/MoveAvatarOutsideHome.php
+@@ -31,6 +31,7 @@
+ use OCP\IConfig;
+ use OCP\Files\Folder;
+ use OCP\IAvatarManager;
++use OCP\Files\NotFoundException;
+ 
+ /**
+  * Move avatars outside of their homes to the new location
+@@ -98,15 +99,19 @@ private function moveAvatars(IOutput $out, IUser $user, Folder $newAvatarsFolder
+ 		\OC\Files\Filesystem::initMountPoints($userId);
+ 
+ 		// call get instead of getUserFolder to avoid needless skeleton copy
+-		$oldAvatarUserFolder = $this->rootFolder->get('/' . $userId);
+-		$oldAvatar = new Avatar($oldAvatarUserFolder, $this->l, $user, $this->logger);
+-		if ($oldAvatar->exists()) {
+-			$newAvatarsUserFolder = $this->avatarManager->getAvatarFolder($userId);
+-
+-			// get original file
+-			$oldAvatarFile = $oldAvatar->getFile(-1);
+-			$oldAvatarFile->move($newAvatarsUserFolder->getPath() . '/' . $oldAvatarFile->getName());
+-			$oldAvatar->remove();
++		try {
++			$oldAvatarUserFolder = $this->rootFolder->get('/' . $userId);
++			$oldAvatar = new Avatar($oldAvatarUserFolder, $this->l, $user, $this->logger);
++			if ($oldAvatar->exists()) {
++				$newAvatarsUserFolder = $this->avatarManager->getAvatarFolder($userId);
++
++				// get original file
++				$oldAvatarFile = $oldAvatar->getFile(-1);
++				$oldAvatarFile->move($newAvatarsUserFolder->getPath() . '/' . $oldAvatarFile->getName());
++				$oldAvatar->remove();
++			}
++		} catch (NotFoundException $e) {
++			// not all users have a home, ignore
+ 		}
+ 
+ 		\OC_Util::tearDownFS();
+
+From d9b7399230707d1143dd8586705b96bbf849c66c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20M=C3=BCller?= <thomas.mueller@tmit.eu>
+Date: Fri, 7 Oct 2016 13:24:50 +0200
+Subject: [PATCH 10/10] Fix use statement for IRootFolder
+
+---
+ lib/private/Repair/MoveAvatarOutsideHome.php | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/lib/private/Repair/MoveAvatarOutsideHome.php b/lib/private/Repair/MoveAvatarOutsideHome.php
+index 6420a91..e302d88 100644
+--- a/lib/private/Repair/MoveAvatarOutsideHome.php
++++ b/lib/private/Repair/MoveAvatarOutsideHome.php
+@@ -20,6 +20,7 @@
+  */
+ namespace OC\Repair;
+ 
++use OCP\Files\IRootFolder;
+ use OCP\IDBConnection;
+ use OCP\IL10N;
+ use OCP\ILogger;
+@@ -29,7 +30,6 @@
+ use OCP\IUser;
+ use OC\Avatar;
+ use OCP\IConfig;
+-use OCP\Files\Folder;
+ use OCP\IAvatarManager;
+ use OCP\Files\NotFoundException;
+ 
+@@ -64,6 +64,10 @@ class MoveAvatarOutsideHome implements IRepairStep {
+ 	 * @param IConfig $config config
+ 	 * @param IDBConnection $connection database connection
+ 	 * @param IUserManager $userManager user manager
++	 * @param IAvatarManager $avatarManager
++	 * @param IRootFolder $rootFolder
++	 * @param IL10N $l10n
++	 * @param ILogger $logger
+ 	 */
+ 	public function __construct(
+ 		IConfig $config,
+@@ -92,8 +96,11 @@ public function getName() {
+ 
+ 	/**
+ 	 * Move avatars outside of their homes
++	 *
++	 * @param IOutput $out
++	 * @param IUser $user
+ 	 */
+-	private function moveAvatars(IOutput $out, IUser $user, Folder $newAvatarsFolder) {
++	private function moveAvatars(IOutput $out, IUser $user) {
+ 		$userId = $user->getUID();
+ 
+ 		\OC\Files\Filesystem::initMountPoints($userId);
