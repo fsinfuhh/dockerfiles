@@ -1,0 +1,24 @@
+From 38fb850a85a90a61f41643a71f41ebc573c2dcaa Mon Sep 17 00:00:00 2001
+From: Felix Wiedemann <1wiedema@informatik.uni-hamburg.de>
+Date: Wed, 7 Dec 2016 13:27:02 +0100
+Subject: [PATCH] Hotfix for share links for logged in users
+
+---
+ apps/dav/appinfo/v1/publicwebdav.php | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/apps/dav/appinfo/v1/publicwebdav.php b/apps/dav/appinfo/v1/publicwebdav.php
+index 4042a84..853030c 100644
+--- a/apps/dav/appinfo/v1/publicwebdav.php
++++ b/apps/dav/appinfo/v1/publicwebdav.php
+@@ -75,6 +75,7 @@ $server = $serverFactory->createServer($baseuri, $requestUri, $authBackend, func
+ 	});
+ 	\OC\Files\Filesystem::logWarningWhenAddingStorageWrapper($previousLog);
+ 
++	OC_Util::tearDownFS(); // XXX: hotfix
+ 	OC_Util::setupFS($owner);
+ 	$ownerView = \OC\Files\Filesystem::getView();
+ 	$path = $ownerView->getPath($fileId);
+-- 
+2.10.2
+
