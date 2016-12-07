@@ -9,9 +9,9 @@ NAME=owncloud
 acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base
 
-acbuild copy avatar-relocate.patch /avatar-relocate.patch
-acbuild copy hidden-files-hide-content.patch /hidden-files-hide-content.patch
-acbuild copy hotfix-for-share-links-for-logged-in-users.patch /hotfix-for-share-links-for-logged-in-users.patch
+acbuild copy-to-dir avatar-relocate.patch /
+acbuild copy-to-dir hidden-files-hide-content.patch /
+acbuild copy-to-dir hotfix-for-share-links-for-logged-in-users.patch /
 acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     usermod -u 2002 -g nogroup www-data
     apt-get -y --no-install-recommends install wget php5-fpm php5 php5-gd php5-intl php5-mcrypt php5-pgsql php5-apcu php5-curl php5-memcache php5-redis php5-ldap patch
