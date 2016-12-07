@@ -1,7 +1,7 @@
 #! /bin/bash
 
 V=9.1
-VERSION=$(wget -qO- https://download.owncloud.org/download/repositories/$V/Debian_8.0/Packages  | grep -FxA1 "Package: owncloud" | grep -oE "[0-9]+((-|\.)[0-9]+)*")
+VERSION=$(wget -qO- https://download.owncloud.org/download/repositories/$V/Debian_8.0/Packages  | grep -FxA1 "Package: owncloud" | grep -oE "[0-9]+((-|\.|~)[0-9rc]+)*")
 NAME=owncloud
 
 . ../acbuildhelper.sh
