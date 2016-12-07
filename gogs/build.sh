@@ -31,6 +31,7 @@ EOG
     chown -R root:nogroup /opt/gogs
     mkdir -p /opt/gogs/custom/conf
     ln -sf /opt/config/app.ini /opt/gogs/custom/conf/
+    ln -s /opt/storage/data /opt/gogs/data
     usermod -d /opt/storage/gituser gogs
     rm -r /home/gogs
     echo "AcceptEnv SSH_ORIGINAL_COMMAND" >> /etc/ssh/sshd_config
