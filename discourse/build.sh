@@ -1,5 +1,6 @@
 #!/bin/bash
-VERSION=`curl https://raw.githubusercontent.com/discourse/discourse/stable/lib/version.rb 2>/dev/null | python -c "import re,sys;v = re.search(r'MAJOR\s*=\s*(\d+).*?MINOR\s*=\s*(\d+).*?TINY\s*=\s*(\d+)', sys.stdin.read(), re.DOTALL);print('{}.{}.{}'.format(*[v.group(n) for n in range(1, 4)]))"`
+BRANCH=master
+VERSION=`curl https://raw.githubusercontent.com/discourse/discourse/${BRANCH}/lib/version.rb 2>/dev/null | python -c "import re,sys;i = sys.stdin.read();v = re.search(r'MAJOR\s*=\s*(\d+).*?MINOR\s*=\s*(\d+).*?TINY\s*=\s*(\d+)', i, re.DOTALL); p = re.search(r'PRE\s*=\s*\'(\w+)\'', i, re.DOTALL); pr = '.' + p.group(1) if p else ''; print('{}.{}.{}'.format(*[v.group(n) for n in range(1, 4)]) + pr)"`
 NAME=discourse
 
 . ../acbuildhelper.sh
@@ -7,7 +8,7 @@ NAME=discourse
 acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base
 
-acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
+acbuild run -- /usr/bin/env BRANCH=$BRANCH VERSION=$VERSION /bin/sh -es <<"EOF"
     useradd -u 3010 -g nogroup -d /opt/discourse discourse
 
     apt update
@@ -71,7 +72,7 @@ acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
       # Installing Mailcatcher ..."
         gem install mailcatcher
 
-      git clone --branch stable https://github.com/discourse/discourse.git
+      git clone --branch ${BRANCH} https://github.com/discourse/discourse.git
       cd discourse
       bundle install --deployment --without test
       gem install unicorn
