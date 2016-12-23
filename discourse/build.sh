@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=42
+VERSION=`curl https://raw.githubusercontent.com/discourse/discourse/stable/lib/version.rb 2>/dev/null | python -c "import re,sys;v = re.search(r'MAJOR\s*=\s*(\d+).*?MINOR\s*=\s*(\d+).*?TINY\s*=\s*(\d+)', sys.stdin.read(), re.DOTALL);print('{}.{}.{}'.format(*[v.group(n) for n in range(1, 4)]))"`
 NAME=discourse
 
 . ../acbuildhelper.sh
@@ -71,7 +71,7 @@ acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
       # Installing Mailcatcher ..."
         gem install mailcatcher
 
-      git clone https://github.com/discourse/discourse.git
+      git clone --branch stable https://github.com/discourse/discourse.git
       cd discourse
       bundle install --deployment --without test
       gem install unicorn
