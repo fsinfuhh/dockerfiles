@@ -1,5 +1,5 @@
 #!/bin/bash
-BRANCH=master
+BRANCH=beta
 VERSION=`curl https://raw.githubusercontent.com/discourse/discourse/${BRANCH}/lib/version.rb 2>/dev/null | python -c "import re,sys;i = sys.stdin.read();v = re.search(r'MAJOR\s*=\s*(\d+).*?MINOR\s*=\s*(\d+).*?TINY\s*=\s*(\d+)', i, re.DOTALL); p = re.search(r'PRE\s*=\s*\'(\w+)\'', i, re.DOTALL); pr = '.' + p.group(1) if p else ''; print('{}.{}.{}'.format(*[v.group(n) for n in range(1, 4)]) + pr)"`
 NAME=discourse
 
