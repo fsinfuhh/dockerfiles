@@ -28,6 +28,7 @@ acbuild run -- /bin/sh -es <<"EOF"
 
 
     ln -sf /opt/config/settings.py /opt/dashboard/mafiasi/settings.py
+    ln -s /opt/config/services.py /opt/dashboard/mafiasi/services.py
     ln -sf /opt/storage/media /opt/dashboard/_media
     apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-dev libsasl2-dev
     apt-get -y autoremove
