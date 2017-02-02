@@ -85,6 +85,7 @@ EOG
     # link configuration
     ln -sf /opt/config/discourse.conf /opt/discourse/discourse/config/
     ln -sf /opt/config/local_unicorn.conf.rb /opt/discourse/discourse/config/
+    ln -sf /opt/config/multisite.yml /opt/discourse/discourse/config/
 
     mkdir -p /opt/discourse/discourse/tmp/pids
 
@@ -107,6 +108,7 @@ export USER=discourse HOME=/opt/discourse
 cd /opt/discourse/discourse
 
 RAILS_ENV=production bundle exec rake db:migrate
+RAILS_ENV=production bundle exec rake multisite:migrate
 
 cp -r /opt/discourse/discourse/public_original/* /opt/discourse/discourse/public/
 # precompile assets in background
