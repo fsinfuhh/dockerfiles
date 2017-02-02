@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=3.2.0
+VERSION=`curl https://github.com/inverse-inc/sogo/releases 2> /dev/null | grep -oE "v[0-9]+\\.[0-9]+\\.[0-9]+" | head -n 1 | grep -oE "[0-9]+\\.[0-9]+\\.[0-9]+"`
 
 NAME=sogo
 
@@ -47,16 +47,26 @@ acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
 install -o sogo -g nogroup -m 755 -d /var/run/sogo
 install -o sogo -g nogroup -m 750 -d /var/log/sogo
 
+# copy static
+cp -r /usr/local/lib/GNUstep/SOGo/WebServerResources/* /opt/static/
+
 export USER=sogo HOME=/home/sogo
 exec su -c 'uwsgi --ini /etc/uwsgi/sogo.ini' sogo
 EOG
+    cat > /usr/local/bin/stop <<EOG
+#!/bin/sh
+export USER=sogo
+uwsgi --stop /tmp/master.pid
+EOG
     chmod +x /usr/local/bin/run
+    chmod +x /usr/local/bin/stop
 
 EOF
 acbuild copy  uwsgi-sogo.ini /etc/uwsgi/sogo.ini
 acbuild port add web tcp 3007
 acbuild mount add config /opt/config
 acbuild mount add log /opt/log
+acbuild mount add static /opt/static
 acbuild set-exec -- /usr/local/bin/run
 
 acbuild write --overwrite $IMAGE_NAME

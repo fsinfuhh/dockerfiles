@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=$(wget -qO- https://raw.githubusercontent.com/gogits/gogs/master/README.md | grep "Current tip version" | grep -oE "[0-9]+(\.[0-9]+)*")
+VERSION=$(curl https://raw.githubusercontent.com/gogits/gogs/master/templates/.VERSION)
 NAME=gogs
 
 . ../acbuildhelper.sh
