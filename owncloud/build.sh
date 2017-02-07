@@ -22,8 +22,8 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     apt -y install owncloud-files
     apt-get clean
     cd /var/www/owncloud
-    patch -p1 < /avatar-relocate.patch
-    patch -p1 < /hidden-files-hide-content.patch
+    #patch -p1 < /avatar-relocate.patch
+    #patch -p1 < /hidden-files-hide-content.patch
     patch -p1 < /hotfix-for-share-links-for-logged-in-users.patch
 
     ln -sf /opt/config/config.php /var/www/owncloud/config/config.php
