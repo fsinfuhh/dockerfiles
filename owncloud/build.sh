@@ -9,8 +9,6 @@ NAME=owncloud
 acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base
 
-acbuild copy-to-dir avatar-relocate.patch /
-acbuild copy-to-dir hidden-files-hide-content.patch /
 acbuild copy-to-dir hotfix-for-share-links-for-logged-in-users.patch /
 acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     usermod -u 2002 -g nogroup www-data
@@ -22,8 +20,6 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     apt -y install owncloud-files
     apt-get clean
     cd /var/www/owncloud
-    #patch -p1 < /avatar-relocate.patch
-    #patch -p1 < /hidden-files-hide-content.patch
     patch -p1 < /hotfix-for-share-links-for-logged-in-users.patch
 
     ln -sf /opt/config/config.php /var/www/owncloud/config/config.php
