@@ -21,6 +21,7 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     apt-get clean
     cd /var/www/owncloud
     patch -p1 < /hotfix-for-share-links-for-logged-in-users.patch
+    sed -i 's/$OC_Channel = '\''stable'\'';/$OC_Channel = '\''foo'\'';/' version.php
 
     ln -sf /opt/config/config.php /var/www/owncloud/config/config.php
     ln -sf /opt/config/www.conf /etc/php5/fpm/pool.d/www.conf
