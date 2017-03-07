@@ -77,7 +77,7 @@ acbuild run -- /usr/bin/env BRANCH=$BRANCH VERSION=$VERSION /bin/sh -es <<"EOF"
       git clone --branch ${BRANCH} https://github.com/discourse/discourse.git
       cd discourse
       patch -p1 < /0001-hotfix-image-upload-problem.patch
-      bundle install --deployment --without test
+      bundle install --deployment --without test --without development
       gem install unicorn
 EOG
 
