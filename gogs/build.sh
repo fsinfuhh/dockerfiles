@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=$(curl https://raw.githubusercontent.com/gogits/gogs/master/templates/.VERSION)
+VERSION=$(curl -s https://raw.githubusercontent.com/gogits/gogs/master/templates/.VERSION | tr -d ' ' | tr '/' '-')
 NAME=gogs
 
 . ../acbuildhelper.sh
