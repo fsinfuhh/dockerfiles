@@ -8,6 +8,8 @@ NAME=discourse
 acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base
 
+acbuild copy-to-dir 0001-hotfix-image-upload-problem.patch /
+
 acbuild run -- /usr/bin/env BRANCH=$BRANCH VERSION=$VERSION /bin/sh -es <<"EOF"
     useradd -u 3010 -g nogroup -d /opt/discourse discourse
 
@@ -74,6 +76,7 @@ acbuild run -- /usr/bin/env BRANCH=$BRANCH VERSION=$VERSION /bin/sh -es <<"EOF"
 
       git clone --branch ${BRANCH} https://github.com/discourse/discourse.git
       cd discourse
+      patch -p1 < /0001-hotfix-image-upload-problem.patch
       bundle install --deployment --without test
       gem install unicorn
 EOG
