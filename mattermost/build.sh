@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=3.2.0
+VERSION=3.9.0
 NAME=mattermost
 
 . ../acbuildhelper.sh
@@ -12,7 +12,7 @@ acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     usermod -u 2003 -g nogroup www-data
     apt-get -y --no-install-recommends install wget
     wget -nv https://releases.mattermost.com/$VERSION/mattermost-team-$VERSION-linux-amd64.tar.gz -O- | tar -C /opt -xz
-    sed -i 's/"login.gitlab":"GitLab"/"login.gitlab":"Login"/' /opt/mattermost/webapp/dist/bundle-$VERSION.js
+    sed -i 's/"login.gitlab":"GitLab"/"login.gitlab":"Login"/' /opt/mattermost/webapp/dist/main.*.js
     chown -R www-data:nogroup /opt/mattermost
 
     ln -sf /opt/config/config.json /opt/mattermost/config/config.json
