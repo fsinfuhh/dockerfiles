@@ -5,7 +5,7 @@ LOCAL_PATH=../../opt/MafiAStar
 
 GIT_HASH=`cd ${LOCAL_PATH} && git log -n 1 | grep commit | cut -d ' ' -f 2 | cut -b 1-6`
 #$(wget -q --header="Accept: application/vnd.github.v3.sha" -O- https://api.github.com/repos/fsinfuhh/mafiasi/commits/heads/feature_cml | cut -b 1-6)
-VERSION=2017.04.12-$GIT_HASH
+VERSION=2017.05.31-$GIT_HASH
 NAME=karaoke
 
 . ../acbuildhelper.sh
@@ -62,6 +62,7 @@ acbuild copy uwsgi-mafiastar.ini /etc/uwsgi/mafiastar.ini
 acbuild port add uwsgi tcp 3008
 acbuild mount add static /opt/static
 acbuild mount add config /opt/config
+acbuild mount add storage /opt/storage
 acbuild mount add log /opt/log
 acbuild set-user -- www-data
 acbuild set-group -- nogroup
