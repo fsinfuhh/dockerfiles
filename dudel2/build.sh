@@ -33,15 +33,15 @@ acbuild run -- /bin/sh -es <<"EOF"
     pip3 install raven
     #make
     mv dudel/settings.py.example dudel/settings.py
-    ./manage.py compilestatic
-    ./manage.py collectstatic --noinput --link
+    ln -sf /opt/static/ /opt/dudel2/_static
+    #./manage.py compilestatic
+    #./manage.py collectstatic --noinput --link
     ./manage.py compilemessages
     chown 2008 -R _static
+    chmod o+r -R .
 
     ln -sf /opt/config/settings.py /opt/dudel2/dudel/settings.py
-    ln -s /opt/config/services.py /opt/dudel2/dudel/services.py
     ln -sf /opt/storage/media /opt/dudel2/_media
-    #ln -sf /opt/static/ /opt/dudel/_static
     apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-dev libsasl2-dev
     apt-get -y autoremove
     apt-get clean
@@ -52,6 +52,7 @@ export USER=www-data HOME=/home/www-data
 . /opt/dudel2/.pyenv/bin/activate
 /opt/dudel2/manage.py migrate
 /opt/dudel2/manage.py compilestatic
+/opt/dudel2/manage.py collectstatic --noinput
 exec uwsgi /etc/uwsgi/dudel2.ini
 EOG
     chmod +x /usr/local/bin/run
