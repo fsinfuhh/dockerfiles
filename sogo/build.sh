@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=`curl https://github.com/inverse-inc/sogo/releases 2> /dev/null | grep -oE "v[0-9]+\\.[0-9]+\\.[0-9]+" | head -n 1 | grep -oE "[0-9]+\\.[0-9]+\\.[0-9]+"`
+VERSION=`curl https://github.com/inverse-inc/sogo/releases 2> /dev/null | grep -oE "v[0-9]+\\.[0-9]+\\.[0-9]+" | grep v3 | head -n 1 | grep -oE "[0-9]+\\.[0-9]+\\.[0-9]+"`
 
 NAME=sogo
 

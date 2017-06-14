@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Actung unten nochmal weil isso
-LOCAL_PATH=/home/nils/git/dudel-django/
+LOCAL_PATH=../../opt/Dudel
 
 GIT_HASH=`cd ${LOCAL_PATH} && git log -n 1 | grep commit | cut -d ' ' -f 2 | cut -b 1-6`
 #$(wget -q --header="Accept: application/vnd.github.v3.sha" -O- https://api.github.com/repos/fsinfuhh/mafiasi/commits/heads/feature_cml | cut -b 1-6)
