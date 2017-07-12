@@ -24,6 +24,15 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     ln -sf /opt/config/www.conf /etc/php/7.0/fpm/pool.d/www.conf
     ln -s /var/log/php7.0-fpm.log /opt/log/php7.0-fpm.error.log
 
+    cat >> /etc/php/7.0/fpm/php.ini <<EOG
+opcache.enable=1
+opcache.enable_cli=1
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=10000
+opcache.memory_consumption=128
+opcache.save_comments=1
+opcache.revalidate_freq=1
+EOG
 
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh
