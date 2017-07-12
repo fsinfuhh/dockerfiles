@@ -19,7 +19,7 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     wget -qO- https://download.nextcloud.com/server/releases/latest-${V}.tar.bz2 | tar -C /var/www -xjv --no-same-owner
     cd /var/www/nextcloud
     patch -p1 < /hotfix-for-share-links-for-logged-in-users.patch
-    sed -i 's/$OC_Channel = '\''stable'\'';/$OC_Channel = '\''foo'\'';/' version.php
+    sed -i 's/$OC_Channel = '\''stable'\'';/$OC_Channel = '\'''\'';/' version.php
     ln -sf /opt/config/config.php /var/www/nextcloud/config/config.php
     ln -sf /opt/config/www.conf /etc/php/7.0/fpm/pool.d/www.conf
     ln -s /var/log/php7.0-fpm.log /opt/log/php7.0-fpm.error.log
