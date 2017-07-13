@@ -6,7 +6,7 @@ NAME=gogs
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base
+acbuild dependency add rkt.mafiasi.de/base-stretch
 
 acbuild run -- /bin/sh -es <<"EOF"
     adduser --disabled-login --gecos 'Gogs' --uid 2001 --ingroup nogroup gogs
