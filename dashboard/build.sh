@@ -7,7 +7,7 @@ NAME=dashboard
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base
+acbuild dependency add rkt.mafiasi.de/base-stretch
 
 acbuild run -- /bin/sh -es <<"EOF"
     usermod -u 2004 -g nogroup -d /opt/dashboard www-data
