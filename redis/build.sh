@@ -13,6 +13,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     service redis-server stop
     usermod -u 2003 -g nogroup redis
     chown -R redis:nogroup /var/log/redis
+    chown -R redis /etc/redis
     sed -i "s/daemonize yes/daemonize no/g" /etc/redis/redis.conf
     sed -i "s/# bind 127.0.0.1/bind 127.0.0.1/g" /etc/redis/redis.conf
     rm -r /var/lib/redis
