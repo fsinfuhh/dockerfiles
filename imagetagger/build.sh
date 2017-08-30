@@ -3,7 +3,7 @@
 LOCAL_PATH=../../opt/imagetagger
 
 GIT_HASH=`cd ${LOCAL_PATH} && git log -n 1 | grep commit | cut -d ' ' -f 2 | cut -b 1-6`
-VERSION=2017.06.29-$GIT_HASH
+VERSION=2017.08.30-$GIT_HASH
 NAME=imagetagger
 
 . ../acbuildhelper.sh
@@ -15,21 +15,23 @@ acbuild copy ${LOCAL_PATH} /opt/imagetagger/
 acbuild run -- /bin/sh -es <<"EOF"
 apt update
     usermod -u 5008 -g nogroup -d /opt/imagetagger www-data
-    apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python python python-virtualenv python3-pip virtualenv yui-compressor make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev
+    apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python uwsgi-plugin-python3 python python-virtualenv python3-pip virtualenv yui-compressor make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev
 
     cd /opt
     rm -rf /opt/imagetagger/.pyenv
     virtualenv /opt/imagetagger/.pyenv -p `which python3`
     cd imagetagger
     . .pyenv/bin/activate
-    pip3 install -r requirements.txt
-    pip3 install psycopg2
-    pip3 install django-ldapdb
-    pip3 install django-auth-ldap
-    pip3 install uwsgi
-    pip3 install raven
+    pip install -r requirements.txt
+    pip install psycopg2
+    pip install django-ldapdb
+    pip install django-auth-ldap
+    pip install uwsgi
+    pip install raven
 
-    ln -sf /opt/config/settings.py /opt/imagetagger/imaggetagger/imaggetagger/settings.py
+    yui-compressor /opt/imagetagger/imagetagger/imagetagger/annotations/static/annotations/js/annotations.js -o /opt/imagetagger/imagetagger/imagetagger/annotations/static/annotations/js/annotations.js
+
+    ln -sf /opt/config/settings.py /opt/imagetagger/imagetagger/imagetagger/settings.py
     apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-dev libsasl2-dev
     apt-get -y autoremove
     apt-get clean
@@ -38,8 +40,8 @@ apt update
 #!/bin/sh
 export USER=www-data HOME=/home/www-data
 . /opt/imagetagger/.pyenv/bin/activate
-/opt/imagetagger/imaggetagger/manage.py migrate
-/opt/imagetagger/imaggetagger/manage.py collectstatic --noinput
+/opt/imagetagger/imagetagger/manage.py migrate
+/opt/imagetagger/imagetagger/manage.py collectstatic --noinput
 exec uwsgi /etc/uwsgi/imagetagger.ini
 EOG
     chmod +x /usr/local/bin/run
