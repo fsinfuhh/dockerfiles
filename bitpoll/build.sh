@@ -20,25 +20,25 @@ acbuild run -- /bin/sh -es <<"EOF"
 
     cd /opt
     wget -nv https://github.com/fsinfuhh/Bitpoll/archive/master.tar.gz -O- | tar -xz
-    wget -nv https://github.com/fsinfuhh/django-simple-csp/archive/master.tar.gz -O- | tar -xz
     mv Bitpoll-master bitpoll
-    mv django-simple-csp-master/* bitpoll/django-simple-csp
-    rm -r django-simple-csp-master
     #rm -rf /opt/bitpoll/.pyenv
     virtualenv --system-site-packages /opt/bitpoll/.pyenv -p `which python3`
     cd bitpoll
     . .pyenv/bin/activate
+    pip3 install --pre django-simple-csp
     pip3 install -r requirements.txt
     pip3 install -U 'Django<1.12'
     pip3 install django-auth-ldap
     pip3 install uwsgi
     pip3 install raven
     ln -sf /opt/static/ /opt/bitpoll/_static
+    cp bitpoll/settings_local.sample.py bitpoll/settings_local.py
     #./manage.py compilestatic
     #./manage.py collectstatic --noinput --link
     ./manage.py compilemessages
     chown 2008 -R _static
     chmod o+r -R .
+    rm bitpoll/settings_local.py
 
     ln -sf /opt/config/settings.py /opt/bitpoll/bitpoll/settings_local.py
     ln -sf /opt/storage/media /opt/bitpoll/_media
