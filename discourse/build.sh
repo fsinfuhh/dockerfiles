@@ -17,9 +17,9 @@ acbuild run -- /usr/bin/env BRANCH=$BRANCH VERSION=$VERSION /bin/sh -es <<"EOF"
     apt -y install build-essential git curl bzip2 libxslt1-dev libcurl4-openssl-dev libksba8 libksba-dev libqtwebkit-dev libreadline-dev libsqlite3-dev sqlite3 postgresql-contrib imagemagick optipng gifsicle jpegoptim libjpeg-progs openssl zlib1g-dev libssl-dev libpq-dev
 
     cd /usr/local/share
-    curl -L https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 > phantomjs-1.9.8-linux-x86_64.tar.bz2
-    tar xvf phantomjs-1.9.8-linux-x86_64.tar.bz2
-    rm phantomjs-1.9.8-linux-x86_64.tar.bz2
+    curl -L https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 > phantomjs-2.1.1-linux-x86_64.tar.bz2
+    tar xvf phantomjs-2.1.1-linux-x86_64.tar.bz2
+    rm phantomjs-2.1.1-linux-x86_64.tar.bz2
     ln -s /usr/local/share/phantomjs-1.9.8-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
 
     mkdir /opt/discourse
@@ -53,7 +53,7 @@ acbuild run -- /usr/bin/env BRANCH=$BRANCH VERSION=$VERSION /bin/sh -es <<"EOF"
         git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
       fi
 
-      ruby_version="2.3.0"
+      ruby_version="2.4.2"
 
       # Installing Ruby $ruby_version ..."
         rbenv install "$ruby_version"
@@ -70,13 +70,14 @@ acbuild run -- /usr/bin/env BRANCH=$BRANCH VERSION=$VERSION /bin/sh -es <<"EOF"
 
       # Installing Bundler ..."
         gem install bundler --no-document --pre
-        
+
       # Installing Mailcatcher ..."
         gem install mailcatcher
 
-      git clone --branch ${BRANCH} https://github.com/discourse/discourse.git
+      git clone --branch ${BRANCH} --depth=1 https://github.com/discourse/discourse.git
       cd discourse
       patch -p1 < /0001-hotfix-image-upload-problem.patch
+      bundle config build.nokogiri --use-system-libraries
       bundle install --deployment --without test --without development
       gem install unicorn
 EOG
@@ -96,7 +97,7 @@ EOG
  
     # clean up
     rm -rf /opt/discourse/.rbenv/.git
-    rm -rf /opt/discourse/discourse/.git
+    #rm -rf /opt/discourse/discourse/.git
     rm -rf /opt/discourse/discourse/vendor/bundle/ruby/2.3.0/cache/*
     apt -y purge bzip2 postgresql
     apt-get -y autoremove
