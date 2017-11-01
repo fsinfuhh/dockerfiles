@@ -25,9 +25,8 @@ acbuild run -- /bin/sh -es <<"EOF"
     virtualenv --system-site-packages /opt/bitpoll/.pyenv -p `which python3`
     cd bitpoll
     . .pyenv/bin/activate
-    pip3 install --pre django-simple-csp
+    pip install -U pip setuptools
     pip3 install -r requirements.txt
-    pip3 install -U 'Django<1.12'
     pip3 install django-auth-ldap
     pip3 install uwsgi
     pip3 install raven
