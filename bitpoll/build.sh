@@ -11,12 +11,18 @@ NAME=bitpoll
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base
+acbuild dependency add rkt.mafiasi.de/base-stretch
 
 #acbuild copy ${LOCAL_PATH} /opt/bitpoll/
 acbuild run -- /bin/sh -es <<"EOF"
     usermod -u 2008 -g nogroup -d /opt/bitpoll www-data
-    apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python python python-virtualenv python3-pip virtualenv yui-compressor make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev coffeescript ruby-sass
+    apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python python python-virtualenv python3-pip virtualenv make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev gpg curl libsasl2-dev
+
+    curl -sL https://deb.nodesource.com/setup_8.x | bash -
+    
+    apt-get install -y --no-install-recommends  npm
+
+    npm install cssmin uglify-js -g
 
     cd /opt
     wget -nv https://github.com/fsinfuhh/Bitpoll/archive/master.tar.gz -O- | tar -xz
@@ -26,14 +32,9 @@ acbuild run -- /bin/sh -es <<"EOF"
     cd bitpoll
     . .pyenv/bin/activate
     pip install -U pip setuptools
-    pip3 install -r requirements.txt
-    pip3 install django-auth-ldap
-    pip3 install uwsgi
-    pip3 install raven
+    pip3 install -r requirements-production.txt
     ln -sf /opt/static/ /opt/bitpoll/_static
     cp bitpoll/settings_local.sample.py bitpoll/settings_local.py
-    #./manage.py compilestatic
-    #./manage.py collectstatic --noinput --link
     ./manage.py compilemessages
     chown 2008 -R _static
     chmod o+r -R .
@@ -41,7 +42,7 @@ acbuild run -- /bin/sh -es <<"EOF"
 
     ln -sf /opt/config/settings.py /opt/bitpoll/bitpoll/settings_local.py
     ln -sf /opt/storage/media /opt/bitpoll/_media
-    apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-dev libsasl2-dev
+    apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-dev libsasl2-dev curl gpg
     apt-get -y autoremove
     apt-get clean
 
@@ -50,7 +51,6 @@ acbuild run -- /bin/sh -es <<"EOF"
 export USER=www-data HOME=/home/www-data
 . /opt/bitpoll/.pyenv/bin/activate
 /opt/bitpoll/manage.py migrate
-/opt/bitpoll/manage.py compilestatic
 /opt/bitpoll/manage.py collectstatic --noinput
 exec uwsgi /etc/uwsgi/bitpoll.ini
 EOG
