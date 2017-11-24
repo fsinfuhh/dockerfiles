@@ -14,7 +14,7 @@ acbuild dependency add rkt.mafiasi.de/base-stretch
 acbuild copy ${LOCAL_PATH} /opt/imagetagger/
 acbuild run -- /bin/sh -es <<"EOF"
 apt update
-    usermod -u 5008 -g nogroup -d /opt/imagetagger www-data
+    usermod -u 5008 -g 33 -d /opt/imagetagger www-data
     apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python uwsgi-plugin-python3 python python-virtualenv python3-pip virtualenv yui-compressor make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev
 
     cd /opt
@@ -55,7 +55,7 @@ acbuild mount add config /opt/config
 acbuild mount add storage /opt/storage
 acbuild mount add log /opt/log
 acbuild set-user -- www-data
-acbuild set-group -- nogroup
+acbuild set-group -- www-data
 acbuild set-exec -- /usr/local/bin/run
 
 acbuild write --overwrite $IMAGE_NAME
