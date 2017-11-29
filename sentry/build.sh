@@ -5,14 +5,14 @@ NAME=sentry
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base
+acbuild dependency add rkt.mafiasi.de/base-stretch
 
 acbuild copy uwsgi.ini /opt/sentry/uwsgi.ini
 
 acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     useradd -u 3080 -g nogroup -d /opt/sentry sentry
     apt update
-    apt-get -y --no-install-recommends install python-setuptools python-pip python-dev libxslt1-dev gcc libffi-dev libjpeg-dev libxml2-dev libxslt-dev libyaml-dev libpq-dev
+    apt-get -y --no-install-recommends install python-setuptools python-pip python-dev libxslt1-dev gcc libffi-dev libjpeg-dev libxml2-dev libxslt-dev libyaml-dev libpq-dev g++
 
     # install python dependencies
     cd /opt/sentry
@@ -27,7 +27,7 @@ acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
 
     chown -R sentry:nogroup /opt/sentry
  
-    apt -y purge python-pip python-setuptools build-essential
+    apt -y purge python-pip python-setuptools build-essential g++
     apt-get -y autoremove
     apt-get clean
     rm -rf /var/cache
