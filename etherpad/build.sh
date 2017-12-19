@@ -6,11 +6,11 @@ NAME=etherpad
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base
+acbuild dependency add rkt.mafiasi.de/base-stretch
 
 acbuild run -- /bin/sh -es <<"EOF"
     usermod -u 2005 -g nogroup www-data
-    apt-get -y --no-install-recommends install wget lsb-release apt-transport-https
+    apt-get -y --no-install-recommends install wget lsb-release apt-transport-https gpg
 
     wget -nv https://deb.nodesource.com/gpgkey/nodesource.gpg.key -O- | apt-key add -
     echo 'deb https://deb.nodesource.com/node_4.x jessie main' > /etc/apt/sources.list.d/nodejs.list
