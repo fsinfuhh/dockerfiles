@@ -24,6 +24,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     pip install django-ldapdb
     pip install uwsgi
     ln -sf /opt/storage/static/ /opt/dashboard/_static
+    ln -sf /opt/storage/.gnupg /opt/dashboard
     mv mafiasi/settings.py.example mafiasi/settings.py
     #./manage.py collectstatic --noinput --link
     ./manage.py compilemessages
@@ -38,7 +39,7 @@ acbuild run -- /bin/sh -es <<"EOF"
 
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh
-export USER=www-data HOME=/home/www-data
+export USER=www-data HOME=/opt/dashboard/
 . /opt/dashboard/.pyenv/bin/activate
 /opt/dashboard/manage.py migrate
 cd /opt/dashboard
