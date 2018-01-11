@@ -12,13 +12,23 @@ acbuild dependency add rkt.mafiasi.de/base-stretch
 acbuild copy-to-dir hotfix-for-share-links-for-logged-in-users.patch /
 acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     usermod -u 2002 -g nogroup www-data
-    apt-get -y --no-install-recommends install wget php7.0-fpm php7.0 php7.0-gd php7.0-intl php7.0-mcrypt php7.0-pgsql php7.0-apcu php7.0-curl php7.0-memcache php7.0-redis php7.0-ldap php7.0-xml php7.0-zip php7.0-json php7.0-mbstring patch gnupg strace bzip2
+    apt-get -y --no-install-recommends install wget php7.0-fpm php7.0 php7.0-gd php7.0-intl php7.0-mcrypt php7.0-pgsql php7.0-apcu php7.0-curl php7.0-memcache php7.0-redis php7.0-ldap php7.0-xml php7.0-zip php7.0-json php7.0-mbstring patch gnupg strace bzip2 git
     apt-get clean
 
     mkdir /var/www
     wget -qO- https://download.nextcloud.com/server/releases/latest-${V}.tar.bz2 | tar -C /var/www -xjv --no-same-owner
     cd /var/www/nextcloud
-    patch -p1 < /hotfix-for-share-links-for-logged-in-users.patch
+    chown www-data apps
+    chown www-data config
+   
+    cd apps
+    git clone https://github.com/nextcloud/richdocuments.git
+    cd richdocuments
+    git checkout 1.12.39 #TODO: dynamisch rausfinden
+
+    cd ../..
+
+    #patch -p1 < /hotfix-for-share-links-for-logged-in-users.patch
     sed -i 's/$OC_Channel = '\''stable'\'';/$OC_Channel = '\'''\'';/' version.php
     ln -sf /opt/config/config.php /var/www/nextcloud/config/config.php
     ln -sf /opt/config/www.conf /etc/php/7.0/fpm/pool.d/www.conf
