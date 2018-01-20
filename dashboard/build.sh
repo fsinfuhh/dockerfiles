@@ -10,7 +10,7 @@ acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base-stretch
 
 acbuild run -- /bin/sh -es <<"EOF"
-    usermod -u 2004 -g nogroup -d /opt/dashboard www-data
+    usermod -u 2004 -g 33 -d /opt/dashboard www-data
     apt-get -y --no-install-recommends install wget uwsgi uwsgi-plugin-python python3 python-virtualenv python3-pip virtualenv yui-compressor make git python3-bleach python3-pil python3-psycopg2 python3-gpgme python3-pygraphviz python3-pypdf2 python3-magic gettext gcc python3-dev libldap2-dev libsasl2-dev make
 
     cd /opt
@@ -57,7 +57,7 @@ acbuild mount add storage /opt/storage
 acbuild mount add config /opt/config
 acbuild mount add log /opt/log
 acbuild set-user -- www-data
-acbuild set-group -- nogroup
+acbuild set-group -- www-data
 acbuild set-exec -- /usr/local/bin/run
 
 acbuild write --overwrite $IMAGE_NAME
