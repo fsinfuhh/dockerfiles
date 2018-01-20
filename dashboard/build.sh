@@ -1,6 +1,6 @@
 #! /bin/bash
 
-GIT_HASH=$(wget -q --header="Accept: application/vnd.github.v3.sha" -O- https://api.github.com/repos/fsinfuhh/mafiasi/commits/heads/feature_cml | cut -b 1-6)
+GIT_HASH=$(wget -q --header="Accept: application/vnd.github.v3.sha" -O- https://api.github.com/repos/fsinfuhh/mafiasi/commits/heads/master | cut -b 1-6)
 VERSION=2017.12.18-$GIT_HASH
 NAME=dashboard
 
@@ -14,8 +14,8 @@ acbuild run -- /bin/sh -es <<"EOF"
     apt-get -y --no-install-recommends install wget uwsgi uwsgi-plugin-python python3 python-virtualenv python3-pip virtualenv yui-compressor make git python3-bleach python3-pil python3-psycopg2 python3-gpgme python3-pygraphviz python3-pypdf2 python3-magic gettext gcc python3-dev libldap2-dev libsasl2-dev make
 
     cd /opt
-    wget -nv https://github.com/fsinfuhh/mafiasi/archive/feature-python3.tar.gz -O- | tar -xz
-    mv mafiasi-feature-python3 dashboard
+    wget -nv https://github.com/fsinfuhh/mafiasi/archive/master.tar.gz -O- | tar -xz
+    mv mafiasi-master dashboard
     virtualenv --system-site-packages -p `which python3` /opt/dashboard/.pyenv
     cd dashboard
     . .pyenv/bin/activate
