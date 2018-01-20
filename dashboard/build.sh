@@ -44,7 +44,7 @@ export USER=www-data HOME=/opt/dashboard/
 /opt/dashboard/manage.py migrate
 cd /opt/dashboard
 make
-/opt/dashboard/manage.py collectstatic
+/opt/dashboard/manage.py collectstatic --no-input
 exec uwsgi /etc/uwsgi/dashboard.ini
 EOG
     chmod +x /usr/local/bin/run
