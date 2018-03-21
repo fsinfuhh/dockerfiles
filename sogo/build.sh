@@ -40,6 +40,8 @@ acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     echo /usr/local/lib/sogo > /etc/ld.so.conf.d/sogo.conf
     ldconfig
 
+    echo ".sg-event--cancelled{display: none !important;}" >> /usr/local/lib/GNUstep/SOGo/WebServerResources/css/theme-default.css
+
     cat > /usr/local/bin/run <<"EOG"
 #!/bin/sh -e
 . /usr/share/GNUstep/Makefiles/GNUstep.sh
