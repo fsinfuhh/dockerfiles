@@ -1,6 +1,6 @@
 #! /bin/bash
 
-V=12
+V=13
 VERSION=$(wget -qO- https://download.nextcloud.com/server/releases/ | grep -oE nextcloud-${V}[^\"]\*.tar.bz2 | sort | uniq | tail -1 | cut -d- -f2 | cut -d. -f-3)
 NAME=nextcloud
 

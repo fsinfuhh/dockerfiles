@@ -28,7 +28,7 @@ apt update
     pip install django-auth-ldap
     pip install uwsgi
     pip install raven
-
+    pip install requests
     yui-compressor /opt/imagetagger/imagetagger/imagetagger/annotations/static/annotations/js/annotations.js -o /opt/imagetagger/imagetagger/imagetagger/annotations/static/annotations/js/annotations.js
 
     ln -sf /opt/config/settings.py /opt/imagetagger/imagetagger/imagetagger/settings.py
