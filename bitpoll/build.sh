@@ -7,7 +7,7 @@
 GIT_HASH=$(wget -q --header="Accept: application/vnd.github.v3.sha" -O- https://api.github.com/repos/fsinfuhh/Bitpoll/commits/heads/master | cut -b 1-6)
 VERSION=2017.07.13-$GIT_HASH
 NAME=bitpoll
-
+sentry-cli releases -o sentry-internal new -p bitpoll $VERSION
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
@@ -33,6 +33,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     . .pyenv/bin/activate
     pip install -U pip setuptools
     pip3 install -r requirements-production.txt
+    pip3 install requests # for sentry transport
     ln -sf /opt/static/ /opt/bitpoll/_static
     cp bitpoll/settings_local.sample.py bitpoll/settings_local.py
     ./manage.py compilemessages
@@ -58,6 +59,7 @@ EOG
 
 EOF
 echo $GIT_HASH > $T/.acbuild/currentaci/rootfs/opt/bitpoll/.gitversion
+echo $VERSION > $T/.acbuild/currentaci/rootfs/opt/bitpoll/.releaseversion
 acbuild copy uwsgi-bitpoll.ini /etc/uwsgi/bitpoll.ini
 acbuild port add uwsgi tcp 3008
 acbuild mount add static /opt/static
