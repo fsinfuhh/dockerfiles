@@ -1,6 +1,6 @@
 #! /bin/bash
 
-VERSION=`curl https://github.com/inverse-inc/sogo/releases 2> /dev/null | grep -oE "v[0-9]+\\.[0-9]+\\.[0-9]+" | grep v3 | head -n 1 | grep -oE "[0-9]+\\.[0-9]+\\.[0-9]+"`
+VERSION=`curl https://github.com/inverse-inc/sogo/releases 2> /dev/null | grep -oE "v[0-9]+\\.[0-9]+\\.[0-9]+" | grep v4 | head -n 1 | grep -oE "[0-9]+\\.[0-9]+\\.[0-9]+"`
 
 NAME=sogo
 
@@ -39,6 +39,8 @@ acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     echo /usr/local/lib > /etc/ld.so.conf.d/sogo.conf
     echo /usr/local/lib/sogo > /etc/ld.so.conf.d/sogo.conf
     ldconfig
+
+    echo ".sg-event--cancelled{display: none !important;}" >> /usr/local/lib/GNUstep/SOGo/WebServerResources/css/theme-default.css
 
     cat > /usr/local/bin/run <<"EOG"
 #!/bin/sh -e
