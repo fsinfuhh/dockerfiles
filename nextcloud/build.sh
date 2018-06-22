@@ -24,7 +24,12 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     cd apps
     git clone https://github.com/nextcloud/richdocuments.git
     cd richdocuments
-    git checkout 1.12.39 #TODO: dynamisch rausfinden
+    git checkout 2.0.9 #TODO: dynamisch rausfinden
+
+    cd ..
+    git clone https://github.com/juliushaertl/theming_customcss.git
+    cd theming_customcss
+    git checkout v1.0.0
 
     cd ../..
 
