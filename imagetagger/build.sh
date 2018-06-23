@@ -46,6 +46,14 @@ exec uwsgi /etc/uwsgi/imagetagger.ini
 EOG
     chmod +x /usr/local/bin/run
 
+    cat > /usr/local/bin/update_points <<EOG
+#!/bin/sh
+export USER=www-data HOME=/home/www-data
+. /opt/imagetagger/.pyenv/bin/activate
+exec /opt/imagetagger/imagetagger/manage.py updatepoints
+EOG
+    chmod +x /usr/local/bin/update_points
+
 EOF
 echo $GIT_HASH > $T/.acbuild/currentaci/rootfs/opt/imagetagger/.gitversion
 acbuild copy uwsgi-imagetagger.ini /etc/uwsgi/imagetagger.ini
