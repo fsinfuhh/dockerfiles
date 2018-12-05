@@ -12,7 +12,6 @@ acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base-stretch
 
 acbuild copy ${LOCAL_PATH} /opt/tauschen/
-acbuild copy ./config/settings.py /opt/tauschen/tauschen-backend/tauschen/settings.py
 acbuild run -- /bin/bash -es <<"EOF"
     apt update
     usermod -u 2009 -g 33 -d /opt/tauschen www-data
