@@ -27,6 +27,7 @@ acbuild run -- /bin/bash -es <<"EOF"
     pip install wheel
     pip install -r requirements.txt
     pip install uWSGI
+    pip install raven
     pip install psycopg2-binary
 
     ln -sf /opt/config/settings.py /opt/directory/mafiasidirectory/settings.py
