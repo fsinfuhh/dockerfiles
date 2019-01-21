@@ -1,6 +1,6 @@
 #! /bin/bash
 
-V=13
+V=15
 VERSION=$(wget -qO- https://download.nextcloud.com/server/releases/ | grep -oE nextcloud-${V}[^\"]\*.tar.bz2 | sort | uniq | tail -1 | cut -d- -f2 | cut -d. -f-3)
 NAME=nextcloud
 
@@ -12,7 +12,7 @@ acbuild dependency add rkt.mafiasi.de/base-stretch
 acbuild copy-to-dir hotfix-for-share-links-for-logged-in-users.patch /
 acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     usermod -u 2002 -g nogroup www-data
-    apt-get -y --no-install-recommends install wget php7.0-fpm php7.0 php7.0-gd php7.0-intl php7.0-mcrypt php7.0-pgsql php7.0-apcu php7.0-curl php7.0-memcache php7.0-redis php7.0-ldap php7.0-xml php7.0-zip php7.0-json php7.0-mbstring patch gnupg strace bzip2 git
+    apt-get -y --no-install-recommends install wget php7.0-fpm php7.0 php7.0-gd php7.0-intl php7.0-mcrypt php7.0-pgsql php7.0-apcu php7.0-curl php7.0-memcache php7.0-redis php7.0-ldap php7.0-xml php7.0-zip php7.0-json php7.0-mbstring patch gnupg strace bzip2 git php-imagick
     apt-get clean
 
     mkdir /var/www
@@ -24,17 +24,17 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     cd apps
     git clone https://github.com/nextcloud/richdocuments.git
     cd richdocuments
-    git checkout 2.0.9 #TODO: dynamisch rausfinden
+    git checkout v3.1.1 #TODO: dynamisch rausfinden
 
     cd ..
-    git clone https://github.com/juliushaertl/theming_customcss.git
-    cd theming_customcss
-    git checkout v1.0.0
+    #git clone https://github.com/juliushaertl/theming_customcss.git
+    #cd theming_customcss
+    #git checkout v1.0.0
 
     cd ../..
 
     #patch -p1 < /hotfix-for-share-links-for-logged-in-users.patch
-    sed -i 's/$OC_Channel = '\''stable'\'';/$OC_Channel = '\'''\'';/' version.php
+    #sed -i 's/$OC_Channel = '\''stable'\'';/$OC_Channel = '\'''\'';/' version.php
     ln -sf /opt/config/config.php /var/www/nextcloud/config/config.php
     ln -sf /opt/config/www.conf /etc/php/7.0/fpm/pool.d/www.conf
     ln -s /var/log/php7.0-fpm.log /opt/log/php7.0-fpm.error.log
