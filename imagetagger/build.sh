@@ -29,7 +29,7 @@ apt update
     pip install uwsgi
     pip install raven
     pip install requests
-    uglifyjs /opt/imagetagger/imagetagger/imagetagger/annotations/static/annotations/js/annotations.js -o /opt/imagetagger/imagetagger/imagetagger/annotations/static/annotations/js/annotations.js
+    #uglifyjs /opt/imagetagger/imagetagger/imagetagger/annotations/static/annotations/js/annotations.js -o /opt/imagetagger/imagetagger/imagetagger/annotations/static/annotations/js/annotations.js
 
     ln -sf /opt/config/settings.py /opt/imagetagger/imagetagger/imagetagger/settings.py
     apt-get -y purge node-uglify git python-pip make gcc python-dev libldap2-dev libsasl2-dev
@@ -53,6 +53,15 @@ export USER=www-data HOME=/home/www-data
 exec /opt/imagetagger/imagetagger/manage.py updatepoints
 EOG
     chmod +x /usr/local/bin/update_points
+
+    cat > /usr/local/bin/zip_daemon <<EOG
+#!/bin/sh
+export USER=www-data HOME=/home/www-data
+. /opt/imagetagger/.pyenv/bin/activate
+exec /opt/imagetagger/imagetagger/manage.py runzipdaemon
+EOG
+    chmod +x /usr/local/bin/zip_daemon
+
 
 EOF
 echo $GIT_HASH > $T/.acbuild/currentaci/rootfs/opt/imagetagger/.gitversion
