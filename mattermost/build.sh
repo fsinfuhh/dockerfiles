@@ -1,12 +1,12 @@
 #! /bin/bash
 
-VERSION=5.0.0
+VERSION=5.7.0
 NAME=mattermost
 
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base
+acbuild dependency add rkt.mafiasi.de/base-stretch
 
 acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     apt update
