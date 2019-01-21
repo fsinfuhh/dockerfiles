@@ -13,7 +13,7 @@ acbuild run -- /bin/sh -es <<"EOF"
     apt-get -y --no-install-recommends install wget lsb-release apt-transport-https gpg
 
     wget -nv https://deb.nodesource.com/gpgkey/nodesource.gpg.key -O- | apt-key add -
-    echo 'deb https://deb.nodesource.com/node_4.x jessie main' > /etc/apt/sources.list.d/nodejs.list
+    echo 'deb https://deb.nodesource.com/node_10.x jessie main' > /etc/apt/sources.list.d/nodejs.list
     apt update
     apt -y install nodejs curl make g++
     apt-get clean
