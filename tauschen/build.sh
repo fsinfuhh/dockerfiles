@@ -1,6 +1,7 @@
 #! /bin/bash
 
-LOCAL_PATH=../../../tauschen
+LOCAL_PATH=../../mafiasi-tauschen
+LOCAL_DIRECTORY_PATH=../../mafiasi-directory
 
 GIT_HASH=`cd ${LOCAL_PATH} && git log -n 1 | grep commit | cut -d ' ' -f 2 | cut -b 1-6`
 VERSION=2018.11.08-$GIT_HASH
@@ -11,7 +12,8 @@ NAME=tauschen
 acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base-stretch
 
-acbuild copy ${LOCAL_PATH} /opt/tauschen/
+acbuild copy ${LOCAL_PATH} /opt/tauschen
+acbuild copy ${LOCAL_DIRECTORY_PATH} /opt/directory
 acbuild run -- /bin/bash -es <<"EOF"
     apt update
     usermod -u 2009 -g 33 -d /opt/tauschen www-data
@@ -34,6 +36,7 @@ acbuild run -- /bin/bash -es <<"EOF"
 
     # Setup tauschen-backend
     ln -sf /opt/config/settings.py /opt/tauschen/tauschen-backend/tauschen/settings.py
+    pip install /opt/directory
 
     # Build frontend
     cd /opt/tauschen/tauschen-frontend
