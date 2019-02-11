@@ -42,7 +42,7 @@ acbuild run -- /bin/bash -es <<"EOF"
     cd /opt/tauschen/tauschen-frontend
     npm install
     npm install --global @angular/cli
-    ng build --prod --subresource-integrity --optimization --aot
+    ng build --prod --subresource-integrity --optimization --aot --source-map
     
     # Cleanup
     apt-get -y autoremove
