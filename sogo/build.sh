@@ -7,12 +7,12 @@ NAME=sogo
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base
+acbuild dependency add rkt.mafiasi.de/base-stretch
 
 acbuild run -- /usr/bin/env VERSION=$VERSION /bin/sh -es <<"EOF"
     adduser --disabled-login --gecos 'Sogo' --uid 2007 --ingroup nogroup sogo
     apt update
-    apt-get --no-install-recommends -y install uwsgi memcached gnustep-make gnustep-base-runtime libgnustep-base-dev gobjc libxml2-dev libldap2-dev libssl-dev zlib1g-dev libpq-dev libmemcached-dev postgresql-client libcurl4-openssl-dev wget make
+    apt-get --no-install-recommends -y install uwsgi memcached gnustep-make gnustep-base-runtime libgnustep-base-dev gobjc libxml2-dev libldap2-dev libssl-dev zlib1g-dev libpq-dev libmemcached-dev postgresql-client libcurl4-openssl-dev wget make libdpkg-perl
 
     mkdir /build && cd /build
     wget -q https://github.com/inverse-inc/sope/archive/SOPE-$VERSION.tar.gz -O- | tar -xz
