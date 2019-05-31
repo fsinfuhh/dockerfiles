@@ -13,16 +13,16 @@ acbuild dependency add rkt.mafiasi.de/base-stretch
 acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
     # import the signing key
     apt-get install gnupg apt-transport-https -y
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0C54D189F4BA284D
+    apt-key adv --no-tty --keyserver keyserver.ubuntu.com --recv-keys 0C54D189F4BA284D 
     # add the repository URL to /etc/apt/sources.list
     echo 'deb https://www.collaboraoffice.com/repos/CollaboraOnline/CODE-debian9 ./' >> /etc/apt/sources.list
     # perform the installation
-    apt-get update && apt-get install -y loolwsd code-brand
+    apt-get update && apt-get install -y loolwsd code-brand #collaboraofficebasis6.0-de
     usermod -u 2010 -g nogroup lool
     mkdir /opt/jails
     chown lool /opt/jails
     chown lool /var/cache/loolwsd
-    chown -hR lool /opt/collaboraoffice5.3/
+    chown -hR lool /opt/collaboraoffice6.0/
     apt-get clean
 
 
@@ -32,13 +32,14 @@ acbuild run -- /usr/bin/env V=$V /bin/sh -es <<"EOF"
 
     cat > /usr/local/bin/run <<EOG
 #!/bin/sh
-export USER=lool HOME=/home/www-data
+export USER=lool HOME=/opt/lool
 # TODO: this is ugly
 cp -r /usr/share/loolwsd/ /opt/static
 #. /etc/sysconfig/loolwsd
 # TODO: warum überlebt das den container ein/auspacken nicht?
+export LANG=C.UTF-8
 setcap "CAP_SYS_CHROOT=ep cap_mknod=ep cap_fowner=ep" /usr/bin/loolforkit
-su lool -s /bin/bash -c /usr/bin/loolwsd  -- --version --o:sys_template_path=/opt/lool/systemplate --o:lo_template_path=/opt/collaboraoffice5.3 --o:child_root_path=/opt/lool/child-roots --o:file_server_root_path=/opt/storage/files
+su lool -s /bin/bash -c /usr/bin/loolwsd  -- --version --o:sys_template_path=/opt/lool/systemplate --o:lo_template_path=/opt/collaboraoffice6.0 --o:child_root_path=/opt/lool/child-roots --o:file_server_root_path=/opt/storage/files
 EOG
     chmod +x /usr/local/bin/run
 
