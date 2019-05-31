@@ -25,8 +25,8 @@ acbuild run -- /bin/sh -es <<"EOF"
     npm install cssmin uglify-js -g
 
     cd /opt
-    wget -nv https://github.com/fsinfuhh/Bitpoll/archive/master.tar.gz -O- | tar -xz
-    mv Bitpoll-master bitpoll
+    wget -nv https://github.com/fsinfuhh/Bitpoll/archive/feature_calendar.tar.gz -O- | tar -xz
+    mv Bitpoll-feature_calendar bitpoll
     #rm -rf /opt/bitpoll/.pyenv
     virtualenv --system-site-packages /opt/bitpoll/.pyenv -p `which python3`
     cd bitpoll
