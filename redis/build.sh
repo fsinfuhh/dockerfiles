@@ -5,7 +5,7 @@ NAME=redis
 . ../acbuildhelper.sh
 
 acbuild set-name rkt.mafiasi.de/$NAME
-acbuild dependency add rkt.mafiasi.de/base-stretch
+acbuild dependency add rkt.mafiasi.de/base-buster
 
 acbuild run -- /bin/sh -es <<"EOF"
     apt-get -y --no-install-recommends install redis-server
