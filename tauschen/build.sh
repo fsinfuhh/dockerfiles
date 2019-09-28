@@ -40,8 +40,10 @@ acbuild run -- /bin/bash -es <<"EOF"
 
     # Build frontend
     cd /opt/tauschen/tauschen-frontend
-    npm install
-    npm install --global @angular/cli
+    rm -rf node_modules
+    npm install yarn --global
+    yarn install
+    yes no | yarn global add @angular/cli
     ng build --prod --subresource-integrity --optimization --aot --source-map
     
     # Cleanup
