@@ -56,7 +56,7 @@ acbuild run -- /bin/bash -es <<"EOF"
         export USER=www-data HOME=/home/www-data
 
         # Actually start the server
-        exec uwsgi /opt/marv/sites/cml/uwsgi.conf
+        exec uwsgi --ini /opt/config/uwsgi.conf
 EOG
     chmod +x /usr/local/bin/run
 
