@@ -25,7 +25,8 @@ acbuild run -- /bin/bash -es <<"EOF"
     echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
     apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
     apt update
-    apt install ros-melodic-ros-base
+    apt install -y ros-melodic-ros-base
+    apt install -y ros-melodic-rosbag
 
     # Install python environment
     rm -rf .pyenv venv
@@ -36,6 +37,7 @@ acbuild run -- /bin/bash -es <<"EOF"
     pip install -r requirements/marv-cli.txt
     pip install -r requirements/marv.txt
     pip install -r requirements/marv-robotics.txt
+    pip install marv-ludwig
 
     # Setup marv
     mkdir -p /opt/marv/sites/cml
@@ -54,6 +56,7 @@ acbuild run -- /bin/bash -es <<"EOF"
     cat > /usr/local/bin/run <<EOG
         #!/bin/bash
         export USER=www-data HOME=/home/www-data
+        export PYTHONPATH=/opt/ros/melodic/lib/python2.7/dist-packages:/opt/marv/venv/lib/python2.7/site-packages
 
         # Actually start the server
         exec uwsgi --ini /opt/config/uwsgi.conf
