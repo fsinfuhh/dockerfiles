@@ -26,8 +26,7 @@ acbuild run -- /bin/bash -es <<"EOF"
     echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
     apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
     apt update
-    apt install -y ros-melodic-ros-base
-    apt install -y ros-melodic-rosbag
+    apt install -y ros-melodic-ros-base ros-melodic-rosbag ros-melodic-cv-bridge
 
     # Install python environment
     rm -rf .pyenv venv
@@ -38,7 +37,7 @@ acbuild run -- /bin/bash -es <<"EOF"
     pip install -r requirements/marv-cli.txt
     pip install -r requirements/marv.txt
     pip install -r requirements/marv-robotics.txt
-    pip install marv-ludwig
+    pip install marv-ludwig PyYAML PyCrypto gnupg rospkg opencv-python
 
     # Setup marv
     mkdir -p /opt/marv/sites/cml
