@@ -55,14 +55,24 @@ acbuild run -- /bin/bash -es <<"EOF"
 
     # Install run-script
     cat > /usr/local/bin/run <<EOG
-        #!/bin/bash
-        export USER=www-data HOME=/home/www-data
-        export PYTHONPATH=/opt/ros/melodic/lib/python2.7/dist-packages:/opt/marv/venv/lib/python2.7/site-packages
+#!/bin/bash
+export USER=www-data HOME=/home/www-data
+export PYTHONPATH=/opt/ros/melodic/lib/python2.7/dist-packages:/opt/marv/venv/lib/python2.7/site-packages
 
-        # Actually start the server
-        exec uwsgi --ini /etc/uwsgi/marv.ini
+# Actually start the server
+exec uwsgi --ini /etc/uwsgi/marv.ini
 EOG
     chmod +x /usr/local/bin/run
+
+    # Install script to update bag database
+    cat > /usr/local/bin/update_db <<EOG
+#!/bin/bash
+export USER=www-data HOME=/home/www-data
+source /opt/marv/venv/bin/activate
+marv scan
+marv run --collection=bags
+EOG
+    chmod +x /usr/local/bin/update_db
 
 EOF
 
