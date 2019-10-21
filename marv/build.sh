@@ -67,9 +67,10 @@ EOG
     cat > /usr/local/bin/update_db <<EOG
 #!/bin/bash
 export USER=www-data HOME=/home/www-data
+source /opt/ros/melodic/setup.bash
 source /opt/marv/venv/bin/activate
-marv scan
-marv run --collection=bags
+marv --config /opt/config/marv.conf scan
+marv --config /opt/config/marv.conf run --collection=bags
 EOG
     chmod +x /usr/local/bin/update_db
 
