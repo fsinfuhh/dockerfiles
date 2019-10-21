@@ -1,6 +1,7 @@
 #! /bin/bash
 
-LOCAL_PATH=../../marv-robotics/
+PATH=/snap/bin:$PATH
+LOCAL_PATH=../../../CML/marv-robotics/
 
 GIT_HASH=`cd ${LOCAL_PATH} && git log -n 1 | grep commit | cut -d ' ' -f 2 | cut -b 1-6`
 VERSION=`date --iso-8601=date`-$GIT_HASH
@@ -59,12 +60,13 @@ acbuild run -- /bin/bash -es <<"EOF"
         export PYTHONPATH=/opt/ros/melodic/lib/python2.7/dist-packages:/opt/marv/venv/lib/python2.7/site-packages
 
         # Actually start the server
-        exec uwsgi --ini /opt/config/uwsgi.conf
+        exec uwsgi --ini /etc/uwsgi/marv.ini
 EOG
     chmod +x /usr/local/bin/run
 
 EOF
 
+acbuild copy uwsgi.ini /etc/uwsgi/marv.ini
 acbuild port add uwsgi tcp 4762
 acbuild mount add scanroot /opt/scanroot
 acbuild mount add config /opt/config
