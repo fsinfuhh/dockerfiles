@@ -1,0 +1,6 @@
+#!/bin/sh
+export USER=www-data HOME=/opt/bitpoll
+. /opt/bitpoll/.pyenv/bin/activate
+/opt/bitpoll/manage.py migrate
+/opt/bitpoll/manage.py collectstatic --noinput
+exec uwsgi /etc/uwsgi/bitpoll.ini
