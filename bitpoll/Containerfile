@@ -15,14 +15,15 @@ RUN npm install cssmin uglify-js -g
 
 RUN wget -nv https://github.com/fsinfuhh/Bitpoll/archive/feature_calendar.tar.gz -O- | tar -xzC /opt
 RUN mv /opt/Bitpoll-feature_calendar /opt/bitpoll
-RUN virtualenv --system-site-packages /opt/bitpoll/.pyenv -p `which python3`
 
 WORKDIR /opt/bitpoll
 
-RUN . .pyenv/bin/activate && pip install -U pip setuptools && pip install -r requirements-production.txt && pip install requests
+RUN pip3 install -U pip setuptools
+RUN pip3 install -r requirements-production.txt
+RUN pip install requests  # for sentry
 RUN ln -sf /opt/static/ /opt/bitpoll/_static
 RUN cp bitpoll/settings_local.sample.py bitpoll/settings_local.py
-RUN . .pyenv/bin/activate ./manage.py compilemessages
+RUN python3 manage.py compilemessages
 RUN chown $UID -R _static
 RUN chmod o+r -R .
 RUN rm bitpoll/settings_local.py
