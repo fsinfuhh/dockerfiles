@@ -1,10 +1,6 @@
 #! /bin/bash
 
-PATH=/snap/bin:$PATH
-LOCAL_PATH=../../../CML/marv-robotics/
-
-GIT_HASH=`cd ${LOCAL_PATH} && git log -n 1 | grep commit | cut -d ' ' -f 2 | cut -b 1-6`
-VERSION=`date --iso-8601=date`-$GIT_HASH
+VERSION=`date --iso-8601=date`-ldap
 NAME=marv
 
 . ../acbuildhelper.sh
@@ -12,21 +8,24 @@ NAME=marv
 acbuild set-name rkt.mafiasi.de/$NAME
 acbuild dependency add rkt.mafiasi.de/base-stretch
 
-acbuild copy ${LOCAL_PATH} /opt/marv
 acbuild run -- /bin/bash -es <<"EOF"
     apt update
     usermod -u 2009 -g 33 -d /opt/marv www-data
-    cd /opt/marv
 
     # Install linux dependencies
     export DEBIAN_FRONTEND=noninteractive
-    apt-get -y --no-install-recommends install dirmngr g++ gnupg lsb-release uwsgi uwsgi-plugin-python libldap2-dev libsasl2-dev libssl-dev virtualenv ffmpeg jq less libcapnp-dev libffi-dev libfreetype6-dev libpng-dev libsasl2-dev libssl-dev libz-dev locales lsof python-cv-bridge python2.7-dev python-opencv python-pip rsync sqlite3 ssh unzip vim
+    apt-get -y --no-install-recommends install dirmngr g++ git gnupg lsb-release uwsgi uwsgi-plugin-python libldap2-dev libsasl2-dev libssl-dev virtualenv ffmpeg jq less libcapnp-dev libffi-dev libfreetype6-dev libpng-dev libsasl2-dev libssl-dev libz-dev locales lsof python-cv-bridge python2.7-dev python-opencv python-pip rsync sqlite3 ssh unzip vim
 
     # Install ROS
     echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
     apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
     apt update
     apt install -y ros-melodic-ros-base ros-melodic-rosbag ros-melodic-cv-bridge
+
+    # Get MARV code
+    git clone https://gitlab.com/timonegk/marv-robotics.git /opt/marv
+    cd /opt/marv
+    git checkout ldap
 
     # Install python environment
     rm -rf .pyenv venv
@@ -69,8 +68,13 @@ EOG
 export USER=www-data HOME=/home/www-data
 source /opt/ros/melodic/setup.bash
 source /opt/marv/venv/bin/activate
-marv --config /opt/config/marv.conf scan
-marv --config /opt/config/marv.conf run --collection=bags
+cd /opt/config
+# Scan for new bags
+marv scan
+marv run --collection=bags
+# Remove deleted bags from database
+MISSING_BAGS=$(marv query --missing)
+marv discard $MISSING_BAGS
 EOG
     chmod +x /usr/local/bin/update_db
 
