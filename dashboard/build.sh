@@ -48,6 +48,12 @@ make
 exec uwsgi /etc/uwsgi/dashboard.ini
 EOG
     chmod +x /usr/local/bin/run
+    cat > /usr/local/bin/update_trustgraphs <<EOG
+#!/bin/sh
+export USER=www-data HOME=/opt/dashboard/
+. /opt/dashboard/.pyenv/bin/activate
+/opt/dashboard/manage.py trustgraph
+EOG
 
 EOF
 echo $GIT_HASH > $T/.acbuild/currentaci/rootfs/opt/dashboard/.gitversion
