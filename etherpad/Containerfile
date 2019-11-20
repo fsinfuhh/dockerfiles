@@ -1,4 +1,4 @@
-FROM dir://base-stretch
+FROM https://registry.mafiasi.de:base-buster
 
 RUN apt-get --yes --no-install-recommends install wget \
 						  lsb-release \
