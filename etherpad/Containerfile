@@ -1,4 +1,4 @@
-FROM dir://base-stretch
+FROM registry.mafiasi.de/base-stretch
 
 RUN apt-get --yes --no-install-recommends install wget \
 						  lsb-release \
@@ -32,5 +32,5 @@ ADD start.sh /usr/local/bin/run
 
 VOLUME /opt/config /opt/log
 EXPOSE 9001/tcp
-USER www-data:nogroup
-CMD /usr/local/bin/run
+USER root:nogroup
+ENTRYPOINT /usr/local/bin/run
