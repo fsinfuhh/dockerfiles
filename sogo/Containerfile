@@ -1,4 +1,4 @@
-FROM registry.mafiasi.de/base-stretch
+FROM debian:stretch
 
 ENV UID=2007
 ENV VERSION=4.1.1

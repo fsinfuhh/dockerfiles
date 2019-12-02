@@ -1,0 +1,3 @@
+#!/bin/sh
+export USER=sogo
+uwsgi --stop /tmp/master.pid
