@@ -1,9 +1,8 @@
 #!/bin/sh
 export USER=www-data HOME=/opt/dashboard/
-. /opt/dashboard/.pyenv/bin/activate
-/opt/dashboard/manage.py migrate
+python3 /opt/dashboard/manage.py migrate
 cd /opt/dashboard
 make
-/opt/dashboard/manage.py collectstatic --no-input
+python3 /opt/dashboard/manage.py collectstatic --no-input
 exec uwsgi /etc/uwsgi/dashboard.ini
 
