@@ -1,6 +1,8 @@
 FROM registry.mafiasi.de/base-buster
 ARG VERSION=16
 
+RUN usermod -u 2002 -g nogroup -d /var/www/ www-data
+
 RUN apt-get -y --no-install-recommends install \
 	    wget \
 	    php7.3-fpm \
@@ -48,7 +50,7 @@ RUN chown 2002 /opt/config
 RUN apt-get purge git* --yes --auto-remove; \
     apt-get clean
 
-USER www-data:nogroup
+#USER www-data:nogroup
 ADD start.sh /usr/local/bin/run
 VOLUME /opt/storage /opt/config /opt/log /opt/static
 EXPOSE 9787/tcp
