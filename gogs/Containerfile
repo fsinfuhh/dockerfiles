@@ -1,0 +1,38 @@
+FROM debian:stretch
+
+ENV UID=2001
+RUN adduser --uid $UID --ingroup nogroup gogs
+
+RUN echo deb http://ftp.de.debian.org/debian jessie-backports main >> /etc/apt/sources.list
+RUN apt update
+RUN apt-get --no-install-recommends -y install golang/jessie-backports golang-go/jessie-backports golang-src/jessie-backports golang-doc/jessie-backports git openssl ca-certificates openssh-client openssh-server
+
+USER gogs
+WORKDIR /home/gogs
+ENV GOPATH=/home/gogs/go
+RUN mkdir go
+RUN go get -u github.com/gogits/gogs
+WORKDIR $GOPATH/src/github.com/gogits/gogs
+RUN go build
+
+USER root
+RUN apt -y purge golang golang-doc golang-go golang-src
+RUN apt-get -y autoremove
+RUN apt-get clean
+
+RUN mkdir /opt/gogs
+RUN cp -ra /home/gogs/go/src/github.com/gogits/gogs /opt
+RUN chown -R root:nogroup /opt/gogs
+RUN mkdir -p /opt/gogs/custom/conf
+RUN ln -sf /opt/config/app.ini /opt/gogs/custom/conf/
+RUN ln -s /opt/storage/data /opt/gogs/data
+RUN usermod -d /opt/storage/gituser gogs
+RUN rm -r /home/gogs
+RUN echo "AcceptEnv SSH_ORIGINAL_COMMAND" >> /etc/ssh/sshd_config
+
+COPY run /usr/local/bin/run
+EXPOSE 3005/tcp 3006/tcp
+VOLUME /opt/storage /opt/config /opt/log
+ENTRYPOINT /usr/local/bin/run
+
+
