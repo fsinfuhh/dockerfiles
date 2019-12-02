@@ -1,4 +1,4 @@
-FROM dir://base-buster
+FROM registry.mafiasi.de/base-buster
 
 RUN apt-get -y --no-install-recommends install redis-server; \
     apt-get clean; \
@@ -13,4 +13,5 @@ RUN apt-get -y --no-install-recommends install redis-server; \
 
 VOLUME /opt/storage
 USER redis:nogroup
-CMD /usr/bin/redis-server /etc/redis/redis.conf
+ENTRYPOINT /usr/bin/redis-server
+# /etc/redis/redis.conf (for some reason, redis config is not working)
