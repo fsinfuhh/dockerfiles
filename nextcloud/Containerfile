@@ -1,4 +1,4 @@
-FROM dir://base-buster
+FROM registry.mafiasi.de/base-buster
 ARG VERSION=16
 
 RUN apt-get -y --no-install-recommends install \
@@ -43,11 +43,13 @@ RUN ln -sf /opt/config/config.php /var/www/nextcloud/config/config.php; \
       echo 'opcache.revalidate_freq=1'; \
     } >> /etc/php/7.3/fpm/php.ini
 
+RUN chown 2002 /opt/config
+
 RUN apt-get purge git* --yes --auto-remove; \
     apt-get clean
 
-USER root:nogroup
+USER www-data:nogroup
 ADD start.sh /usr/local/bin/run
 VOLUME /opt/storage /opt/config /opt/log /opt/static
 EXPOSE 9787/tcp
-CMD /usr/local/bin/run
+ENTRYPOINT /usr/local/bin/run
