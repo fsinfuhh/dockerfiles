@@ -1,36 +1,38 @@
-FROM https://registry.mafiasi.de:base-buster
+FROM registry.mafiasi.de/base-buster
 
-RUN apt-get --yes --no-install-recommends install wget \
-						  lsb-release \
-						  apt-transport-https \
-						  gpg ; \
-     wget -nv https://deb.nodesource.com/gpgkey/nodesource.gpg.key -O- | apt-key add - ; \
-     echo 'deb https://deb.nodesource.com/node_10.x jessie main' > /etc/apt/sources.list.d/nodejs.list ; \
-     apt update && apt --yes install nodejs curl make g++; \
-     wget -nv https://github.com/ether/etherpad-lite/tarball/master -O- | tar -C /opt -xz ; \
-     mv /opt/ether-etherpad-lite* /opt/etherpad; \
-     chown -R www-data:nogroup /opt/etherpad
+ENV ETHERPAD_PLUGINS="ep_adminpads ep_align ep_authornames ep_ether-o-meter ep_headings2 ep_hide_referrer ep_latexexport ep_line_height ep_message_all ep_subscript_and_superscript"
+ENV VERSION=1.7.5
 
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends ca-certificates \
+						  curl \
+						  gnupg \
+						  dirmngr \
+						  wget && \
+    apt-get install --yes --no-install-recommends nodejs npm
+
+RUN export buildDeps='git' && \
+    useradd --uid 2005 --create-home etherpad && \
+    apt-get install --yes --no-install-recommends $buildDeps && \
+    git clone https://github.com/ether/etherpad-lite.git /opt/etherpad && \
+    git --git-dir=/opt/etherpad/.git --work-tree=/opt/etherpad checkout ${VERSION} && \
+    chown -R etherpad:etherpad /opt/etherpad && \
+    apt-get clean && apt --yes purge $buildDeps && apt-get --yes autoremove
+# npm requires updating: https://github.com/nodejs/help/issues/1877#issuecomment-537762282
+RUN npm install npm@latest -g
+
+USER etherpad:nogroup
 WORKDIR /opt/etherpad
-RUN bin/installDeps.sh; \
-    npm install ep_adminpads \
-		ep_align \
-		ep_authornames \
-		ep_ether-o-meter \
-		ep_headings2 \
-		ep_hide_referrer \
-		ep_latexexport \
-		ep_line_height \
-		ep_message_all \
-		ep_subscript_and_superscript; \
-     ln -sf /opt/config/settings.json /opt/etherpad/settings.json ; \
-     ln -sf /opt/config/APIKEY.txt /opt/etherpad/APIKEY.txt ;
-
-RUN apt-get clean && apt --yes purge make g++ && apt-get --yes autoremove
+RUN bin/installDeps.sh && \
+    rm -rf ~/.npm/_cacache && \
+    npm install ${ETHERPAD_PLUGINS} && \
+    ln -sf /opt/config/settings.json /opt/etherpad/settings.json && \
+    ln -sf /opt/config/APIKEY.txt /opt/etherpad/APIKEY.txt
+# According to npm, there are several vulnerabilities found.
+# Maybe we should execute npm audit fix?
 
 ADD start.sh /usr/local/bin/run
 
 VOLUME /opt/config /opt/log
 EXPOSE 9001/tcp
-USER www-data:nogroup
 CMD /usr/local/bin/run
