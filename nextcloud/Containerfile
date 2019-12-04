@@ -1,4 +1,5 @@
-FROM dir://base-buster
+FROM registry.mafiasi.de/base-buster
+
 ARG VERSION=16
 
 RUN apt-get -y --no-install-recommends install \
@@ -29,7 +30,8 @@ RUN apt-get -y --no-install-recommends install \
 
 RUN DIR="/var/www/nextcloud/apps/richdocuments"; \
     git clone https://github.com/nextcloud/richdocuments.git $DIR ; \
-    git --git-dir=$DIR/.git --work-tree=$DIR checkout $(git --git-dir=$DIR/.git --work-tree=$DIR tag | tail -n1)
+    git --git-dir=$DIR/.git --work-tree=$DIR checkout \
+    	$(git --git-dir=$DIR/.git --work-tree=$DIR tag --list --sort=version:refname | tail -n1)
 
 RUN ln -sf /opt/config/config.php /var/www/nextcloud/config/config.php; \
     ln -sf /opt/config/www.conf /etc/php/7.3/fpm/pool.d/www.conf; \
