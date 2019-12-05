@@ -5,7 +5,7 @@ ENV UID=2008
 
 RUN usermod -u $UID -g nogroup -d /opt/bitpoll www-data
 RUN apt update
-RUN apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python python python-virtualenv python3-pip virtualenv make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev gpg gpg-agent curl libsasl2-dev
+RUN apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python3 python3 python-virtualenv python3-pip virtualenv make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev gpg gpg-agent curl libsasl2-dev
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y --no-install-recommends npm
