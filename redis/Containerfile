@@ -11,7 +11,8 @@ RUN apt-get -y --no-install-recommends install redis-server; \
     rm -r /var/lib/redis; \
     ln -sf /opt/storage/redis /var/lib
 
-VOLUME /opt/storage
 USER redis:nogroup
+VOLUME /opt/storage
+EXPOSE 6379
 ENTRYPOINT /usr/bin/redis-server
 # /etc/redis/redis.conf (for some reason, redis config is not working)
