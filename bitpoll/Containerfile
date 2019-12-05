@@ -34,6 +34,7 @@ RUN apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-
 RUN apt-get -y autoremove
 RUN apt-get clean
 
+ENV LANG=C.UTF-8
 COPY run /usr/local/bin
 COPY uwsgi-bitpoll.ini /etc/uwsgi/bitpoll.ini
 EXPOSE 3008/tcp
