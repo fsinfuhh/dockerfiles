@@ -1,5 +1,4 @@
 #sentry-cli releases -o sentry-internal new -p bitpoll $VERSION
-
 FROM debian:buster
 
 ENV UID=2008
@@ -33,6 +32,9 @@ RUN ln -sf /opt/storage/media /opt/bitpoll/_media
 RUN apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-dev libsasl2-dev curl gpg
 RUN apt-get -y autoremove
 RUN apt-get clean
+
+ARG RELEASE_VERSION=2019.12.05
+RUN echo $RELEASE_VERSION > /opt/bitpoll/.releaseversion
 
 ENV LANG=C.UTF-8
 COPY run /usr/local/bin
