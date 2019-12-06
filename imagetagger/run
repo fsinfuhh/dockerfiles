@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+/opt/imagetagger/imagetagger/manage.py migrate
+/opt/imagetagger/imagetagger/manage.py collectstatic --noinput
+exec uwsgi /etc/uwsgi/imagetagger.ini
+
