@@ -20,7 +20,6 @@ USER root
 RUN usermod -d /opt/storage/gituser gogs
 RUN echo "AcceptEnv SSH_ORIGINAL_COMMAND" >> /etc/ssh/sshd_config
 
-USER gogs:nogroup
 COPY run /usr/local/bin/run
 EXPOSE 3005/tcp 3006/tcp
 VOLUME /opt/storage /opt/config /opt/log
