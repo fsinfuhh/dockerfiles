@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+source /opt/config/config.bash.env
+sed -i "s|/proc/self/fd/2|/dev/stderr|" /etc/php7/php-fpm.conf
+
+/usr/local/bin/entrypoint.sh
+
