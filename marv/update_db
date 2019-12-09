@@ -1,0 +1,11 @@
+#!/bin/bash
+export USER=www-data HOME=/home/www-data
+source /opt/ros/melodic/setup.bash
+source /opt/marv/venv/bin/activate
+cd /opt/config
+# Scan for new bags
+marv scan
+marv run --collection=bags
+# Remove deleted bags from database
+MISSING_BAGS=$(marv query --missing)
+marv discard $MISSING_BAGS
