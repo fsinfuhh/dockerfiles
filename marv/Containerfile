@@ -15,7 +15,8 @@ RUN git clone https://gitlab.com/timonegk/marv-robotics.git /opt/marv
 WORKDIR /opt/marv
 RUN git checkout ldap
 
-RUN pip install -r requirements/marv-cli.txt; \
+RUN pip install wheel; \
+    pip install -r requirements/marv-cli.txt; \
     pip install -r requirements/marv.txt; \
     pip install -r requirements/marv-robotics.txt; \
     pip install marv-ludwig PyYAML PyCrypto gnupg rospkg opencv-python
