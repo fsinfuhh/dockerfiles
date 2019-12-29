@@ -8,5 +8,5 @@ fi
 
 hostname -I > /opt/storage/gitea.ip
 
-su gitea -s /bin/sh -c "/opt/gitea/gitea web"
+su git -s /bin/sh -c "/opt/gitea/gitea web"
 
