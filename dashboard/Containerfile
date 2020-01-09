@@ -44,7 +44,7 @@ RUN ln -sf /opt/config/settings.py /opt/dashboard/mafiasi/settings.py
 RUN ln -s /opt/config/services.py /opt/dashboard/mafiasi/services.py
 RUN ln -sf /opt/storage/media /opt/dashboard/_media
 
-RUN apt-get -y purge yui-compressor git python-pip gcc python-dev libldap2-dev libsasl2-dev curl gpg
+RUN apt-get -y purge yui-compressor git python-pip gcc python-dev libldap2-dev libsasl2-dev curl
 RUN apt-get -y autoremove
 RUN apt-get clean
 
@@ -56,4 +56,4 @@ VOLUME /opt/config
 VOLUME /opt/log
 
 USER www-data:nogroup
-ENTRYPOINT /usr/local/bin/run
+CMD /usr/local/bin/run
