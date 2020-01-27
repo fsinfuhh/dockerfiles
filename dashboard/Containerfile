@@ -4,7 +4,7 @@ FROM registry.mafiasi.de/base-buster
 
 ENV UID=2004
 
-RUN usermod -u $UID -g nogroup -d /opt/dashboard www-data
+RUN usermod -u $UID -g www-data -d /opt/dashboard www-data
 RUN apt update
 
 # https://stackoverflow.com/questions/58160597/docker-fails-with-sub-process-usr-bin-dpkg-returned-an-error-code-1
@@ -55,5 +55,5 @@ VOLUME /opt/static
 VOLUME /opt/config
 VOLUME /opt/log
 
-USER www-data:nogroup
+USER www-data:www-data
 CMD /usr/local/bin/run
