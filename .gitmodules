@@ -1,6 +1,6 @@
 [submodule "tauschen/tauschen"]
 	path = tauschen/tauschen
-	url = gogs@gogs.mafiasi.de:mafiasi-ag/Mafiasi-Tauschen.git
+	url = git@git.mafiasi.de:mafiasi-ag/Mafiasi-Tauschen.git
 [submodule "tauschen/directory"]
 	path = tauschen/directory
-	url = gogs@gogs.mafiasi.de:mafiasi-ag/mafiasi-directory.git
+	url = git@git.mafiasi.de:mafiasi-ag/mafiasi-directory.git
