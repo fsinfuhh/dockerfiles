@@ -17,6 +17,7 @@ ADD $DIRECTORY_PATH /opt/directory
 ADD $TAUSCHEN_PATH/tauschen-backend /opt/tauschen/tauschen-backend
 
 # Setup backend
+RUN pip3 install wheel
 RUN pip3 install -r /opt/tauschen/tauschen-backend/requirements.txt
 RUN ln -sf /opt/config/settings.py /opt/tauschen/tauschen-backend/tauschen/settings.py
 RUN pip3 install /opt/directory
@@ -36,6 +37,8 @@ FROM base as final
 COPY --from=frontend /opt/tauschen/tauschen-frontend/dist/tauschen-frontend/ /opt/tauschen/tauschen-frontend/dist/tauschen-frontend/
 ADD start.sh /usr/local/bin/run
 ADD uwsgi-tauschen.ini /etc/uwsgi/tauschen.ini
+
+RUN usermod -u 2009 -g 33 -d /opt/tauschen/tauschen-backend www-data
 
 VOLUME /opt/static
 VOLUME /opt/config
