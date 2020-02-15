@@ -13,7 +13,7 @@ RUN pip3 install -r /opt/imagetagger/requirements.txt && \
 	pip3 install raven uwsgi django-ldapdb django-auth-ldap
 
 # clean container
-RUN apt -y purge node-uglify git python3-pip make gcc python3-dev libldap2-dev libsasl2-dev
+RUN apt -y purge --auto-remove node-uglify git python3-pip make gcc python3-dev libldap2-dev libsasl2-dev
 RUN apt clean
 
 # confiure runtime environment
