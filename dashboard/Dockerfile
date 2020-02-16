@@ -22,9 +22,8 @@ RUN mv /opt/mafiasi-master /opt/dashboard
 
 WORKDIR /opt/dashboard
 
-RUN pip3 install -U pip setuptools
-RUN pip3 install -r requirements.txt
-RUN pip3 install -U 'Django<2.1'
+RUN pip3 install -U pip setuptools pipenv
+RUN pipenv install --system --deploy --ignore-pipfile
 RUN pip3 install django-ldapdb
 RUN pip3 install uwsgi
 RUN pip3 install requests  # for sentry
@@ -49,6 +48,7 @@ RUN apt-get -y autoremove
 RUN apt-get clean
 
 COPY run /usr/local/bin
+COPY update_trustgraphs /usr/local/bin
 COPY uwsgi-dashboard.ini /etc/uwsgi/dashboard.ini
 EXPOSE 3003/tcp
 VOLUME /opt/static
