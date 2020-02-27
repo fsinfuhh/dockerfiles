@@ -1,0 +1,4 @@
+#!/bin/sh
+export USER=www-data HOME=/home/www-data
+cd /opt/mattermost
+exec /opt/mattermost/bin/mattermost
