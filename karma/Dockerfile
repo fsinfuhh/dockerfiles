@@ -1,7 +1,7 @@
 FROM debian:buster
 
 RUN apt update
-RUN apt -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python uwsgi-plugin-python3 python python-virtualenv python3-pip virtualenv yui-compressor make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev
+RUN apt -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python uwsgi-plugin-python3 python python-virtualenv python3-pip virtualenv make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev
 
 RUN git clone https://github.com/bit-bots/karma.git /opt/karma
 RUN usermod -u 2012 -g 33 -d /opt/karma www-data
