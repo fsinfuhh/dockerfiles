@@ -1,11 +1,11 @@
-FROM registry.mafiasi.de/base-stretch
+FROM registry.mafiasi.de/base-buster
 
 RUN apt-get --yes --no-install-recommends install wget \
 						  lsb-release \
 						  apt-transport-https \
-						  gpg ; \
+						  gnupg2 ; \
      wget -nv https://deb.nodesource.com/gpgkey/nodesource.gpg.key -O- | apt-key add - ; \
-     echo 'deb https://deb.nodesource.com/node_10.x jessie main' > /etc/apt/sources.list.d/nodejs.list ; \
+     echo 'deb https://deb.nodesource.com/node_10.x buster main' > /etc/apt/sources.list.d/nodejs.list ; \
      apt update && apt --yes install nodejs curl make g++; \
      wget -nv https://github.com/ether/etherpad-lite/tarball/master -O- | tar -C /opt -xz ; \
      mv /opt/ether-etherpad-lite* /opt/etherpad; \

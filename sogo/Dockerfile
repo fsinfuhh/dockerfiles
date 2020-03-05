@@ -1,7 +1,7 @@
 FROM debian:stretch
 
 ENV UID=2007
-ENV VERSION=4.1.1
+ENV VERSION=4.3.0
 
 RUN useradd -u $UID -g nogroup sogo
 RUN apt update
