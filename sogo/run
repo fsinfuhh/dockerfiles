@@ -8,4 +8,4 @@ install -o sogo -g nogroup -m 750 -d /var/log/sogo
 cp -r /usr/local/lib/GNUstep/SOGo/WebServerResources/* /opt/static/
 
 export USER=sogo HOME=/home/sogo
-exec su -c 'uwsgi --ini /etc/uwsgi/sogo.ini' sogo
+exec uwsgi --ini /etc/uwsgi/sogo.ini
