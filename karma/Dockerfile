@@ -14,8 +14,9 @@ RUN pipenv sync
 RUN pipenv install psycopg2-binary django-ldapdb django-auth-ldap uwsgi raven requests
 
 RUN ln -sf /opt/config/settings.py /opt/karma/karma/settings.py
-RUN ln -sf /opt/storage/static/ /opt/karma/_static
-RUN ln -sf /opt/storage/media /opt/karma/_media
+RUN ln -sf /opt/static/ /opt/karma/_static
+
+RUN apt remove -y --autoremove g++ wget make git gcc python3-dev libldap2-dev libsasl2-dev
 
 COPY uwsgi-karma.ini /etc/uwsgi/karma.ini
 COPY run /usr/local/bin/run
