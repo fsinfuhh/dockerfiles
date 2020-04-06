@@ -1,8 +1,6 @@
-#sentry-cli releases -o sentry-internal new -p bitpoll $VERSION
-
 FROM registry.mafiasi.de/base-buster
 
-ENV UID=101
+ENV UID=2004
 
 RUN usermod -u $UID -g www-data -d /opt/dashboard www-data
 RUN apt update
