@@ -1,4 +1,0 @@
-#!/bin/sh
-export USER=www-data HOME=/opt/dashboard/
-cd /opt/dashboard
-pipenv run ./manage.py trustgraph

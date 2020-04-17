@@ -46,7 +46,6 @@ RUN apt-get -y autoremove
 RUN apt-get clean
 
 COPY run /usr/local/bin
-COPY update_trustgraphs /usr/local/bin
 COPY uwsgi-dashboard.ini /etc/uwsgi/dashboard.ini
 EXPOSE 3003/tcp
 VOLUME /opt/static
