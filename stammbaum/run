@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /opt/stammbaum
+cd /app/src
 python3 ./manage.py migrate
 python3 ./manage.py collectstatic --noinput
 exec uwsgi /etc/uwsgi/stammbaum.ini
