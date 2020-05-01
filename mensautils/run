@@ -1,0 +1,5 @@
+#!/bin/sh
+cd /app/src
+python3 ./manage.py migrate
+python3 ./manage.py collectstatic --noinput
+exec uwsgi /etc/uwsgi/mensautils.ini
