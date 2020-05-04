@@ -1,6 +1,4 @@
 #!/bin/sh
-export USER=www-data HOME=/home/www-data
-
-python3 /opt/MafiAStar/manage.py migrate
-python3 /opt/MafiAStar/manage.py collectstatic --noinput
+python3 /app/src/manage.py migrate
+python3 /app/src/manage.py collectstatic --noinput
 exec uwsgi /etc/uwsgi/mafiastar.ini

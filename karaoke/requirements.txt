@@ -1,0 +1,23 @@
+# This file contains pinned requirements from the old container
+DateTime==4.2
+Django==1.11.5
+chardet==2.3.0
+colorama==0.3.2
+django-auth-ldap==1.2.16
+django-guardian==1.4.9
+django-ldapdb==0.9.0
+html5lib==0.999
+mutagen==1.38
+prettytable==0.7.2
+psycopg2==2.5.4
+pyasn1==0.1.7
+pyldap==2.4.37
+python3-ldap==0.9.4.2
+pytz==2017.2
+raven==6.2.1
+requests==2.4.3
+six==1.8.0
+uWSGI==2.0.15
+urllib3==1.9.1
+virtualenv==1.11.6
+zope.interface==4.4.3
