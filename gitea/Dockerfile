@@ -1,6 +1,6 @@
 FROM registry.mafiasi.de/base-buster
 
-ENV VERSION=1.11.1
+ENV VERSION=1.11.6
 ENV UID=2001
 
 RUN useradd -u $UID -g nogroup git -d /home/gitea -m
