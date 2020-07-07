@@ -1,9 +1,11 @@
 FROM registry.mafiasi.de/base-stretch
 
+ENV VERSION=5.24.2
+
 RUN apt update
 RUN usermod -u 2003 -g nogroup www-data
 RUN apt-get -y --no-install-recommends install wget
-RUN wget -nv https://releases.mattermost.com/5.22.1/mattermost-5.22.1-linux-amd64.tar.gz -O- | tar -C /opt -xz;\
+RUN wget -nv https://releases.mattermost.com/$VERSION/mattermost-$VERSION-linux-amd64.tar.gz -O- | tar -C /opt -xz;\
     sed -i 's/"login.gitlab":"GitLab"/"login.gitlab":"Login"/' /opt/mattermost/client/*.js;\
     sed -i 's/DIAGNOSTICS_SEGMENT_KEY:"[a-zA-z0-9]*"/DIAGNOSTICS_SEGMENT_KEY:""/' /opt/mattermost/client/*.js;\
     chown -R www-data:nogroup /opt/mattermost

@@ -1,5 +1,7 @@
 FROM registry.mafiasi.de/base-buster
 
+ENV VERSION=1.8.4
+
 RUN apt-get --yes --no-install-recommends install wget \
 						  lsb-release \
 						  apt-transport-https \
@@ -7,8 +9,8 @@ RUN apt-get --yes --no-install-recommends install wget \
      wget -nv https://deb.nodesource.com/gpgkey/nodesource.gpg.key -O- | apt-key add - ; \
      echo 'deb https://deb.nodesource.com/node_10.x buster main' > /etc/apt/sources.list.d/nodejs.list ; \
      apt update && apt --yes install nodejs curl make g++; \
-     wget -nv https://github.com/ether/etherpad-lite/tarball/master -O- | tar -C /opt -xz ; \
-     mv /opt/ether-etherpad-lite* /opt/etherpad; \
+     wget -nv https://github.com/ether/etherpad-lite/archive/$VERSION.tar.gz -O- | tar -C /opt -xz ; \
+     mv /opt/etherpad-lite-$VERSION /opt/etherpad; \
      chown -R www-data:nogroup /opt/etherpad
 
 WORKDIR /opt/etherpad
