@@ -43,7 +43,8 @@ RUN ln -sf /opt/config/config.php /var/www/nextcloud/config/config.php; \
       echo 'opcache.memory_consumption=128'; \
       echo 'opcache.save_comments=1'; \
       echo 'opcache.revalidate_freq=1'; \
-    } >> /etc/php/7.3/fpm/php.ini
+    } >> /etc/php/7.3/fpm/php.ini; \
+    sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.3/fpm/php.ini
 
 RUN chown 2002 /opt/config
 
