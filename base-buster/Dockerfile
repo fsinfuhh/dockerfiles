@@ -1,4 +1,4 @@
-FROM docker://debian:buster-slim
+FROM docker.io/debian:buster-slim
 
 COPY sources.list /etc/apt/sources.list
 RUN apt update; apt upgrade --yes
