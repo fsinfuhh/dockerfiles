@@ -1,5 +1,5 @@
 FROM registry.mafiasi.de/base-buster
-ARG VERSION=18
+ARG VERSION=19
 
 RUN usermod -u 2002 -g nogroup -d /var/www/ www-data
 
