@@ -18,3 +18,23 @@ steps:
       context: base-buster
       dockerfile: base-buster/Dockerfile
 
+---
+kind: pipeline
+type: kubernetes
+name: base-stretch
+trigger:
+  branch:
+    - master
+
+steps:
+  - name: update container
+    image: plugins/docker
+    settings:
+      registry: registry.mafiasi.de
+      repo: registry.mafiasi.de/base-stretch
+      username: agserver
+      password:
+        from_secret: REGISTRY_PW
+      context: base-stretch
+      dockerfile: base-stretch/Dockerfile
+
