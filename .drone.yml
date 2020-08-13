@@ -38,3 +38,23 @@ steps:
       context: base-stretch
       dockerfile: base-stretch/Dockerfile
 
+---
+kind: pipeline
+type: kubernetes
+name: nextcloud
+trigger:
+  branch:
+    - master
+
+steps:
+  - name: update container
+    image: plugins/docker
+    settings:
+      registry: registry.mafiasi.de
+      repo: registry.mafiasi.de/nextcloud
+      username: agserver
+      password:
+        from_secret: REGISTRY_PW
+      context: nextcloud
+      dockerfile: nextcloud/Dockerfile
+
