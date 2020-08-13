@@ -58,3 +58,23 @@ steps:
       context: nextcloud
       dockerfile: nextcloud/Dockerfile
 
+---
+kind: pipeline
+type: kubernetes
+name: collaboraoffice
+trigger:
+  branch:
+    - master
+
+steps:
+  - name: update container
+    image: plugins/docker
+    settings:
+      registry: registry.mafiasi.de
+      repo: registry.mafiasi.de/collaboraoffice
+      username: agserver
+      password:
+        from_secret: REGISTRY_PW
+      context: collaboraoffice
+      dockerfile: collaboraoffice/Dockerfile
+
