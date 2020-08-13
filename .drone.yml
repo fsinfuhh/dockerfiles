@@ -16,5 +16,5 @@ steps:
       password:
         from_secret: REGISTRY_PW
       context: base-buster
-      dockerfile: base-buster/dockerfile
+      dockerfile: base-buster/Dockerfile
 
