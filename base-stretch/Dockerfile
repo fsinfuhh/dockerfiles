@@ -1,4 +1,4 @@
-FROM docker://debian:stretch-slim
+FROM docker.io/debian:stretch-slim
 
 COPY sources.list /etc/apt/sources.list
 RUN apt update; apt upgrade --yes
