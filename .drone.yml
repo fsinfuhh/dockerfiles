@@ -57,6 +57,11 @@ steps:
         from_secret: REGISTRY_PW
       context: nextcloud
       dockerfile: nextcloud/Dockerfile
+  - name: restart deployment
+    image: registry.mafiasi.de/deployment_restarter
+    settings:
+      namespace: mafiasi-prod
+      name: mafiasi-cloud
 
 ---
 kind: pipeline
