@@ -1,7 +1,10 @@
 FROM registry.mafiasi.de/base-buster
 ARG VERSION=19
+ARG UID=3001
+ARG GID=3001
 
-RUN usermod -u 2002 -g nogroup -d /var/www/ www-data
+RUN groupmod -g $GID www-data
+RUN usermod -u $UID -g $GID -d /var/www/ www-data
 
 RUN apt-get -y --no-install-recommends install \
 	    wget \
@@ -46,7 +49,7 @@ RUN ln -sf /opt/config/config.php /var/www/nextcloud/config/config.php; \
     } >> /etc/php/7.3/fpm/php.ini; \
     sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.3/fpm/php.ini
 
-RUN chown 2002 /opt/config
+RUN chown www-data /opt/config
 
 RUN apt-get purge git* --yes --auto-remove; \
     apt-get clean
