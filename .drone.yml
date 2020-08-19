@@ -83,3 +83,31 @@ steps:
       context: collaboraoffice
       dockerfile: collaboraoffice/Dockerfile
 
+---
+kind: pipeline
+type: kubernetes
+name: mattermost
+trigger:
+  branch:
+    - master
+
+steps:
+  - name: update container
+    image: plugins/docker
+    settings:
+      registry: registry.mafiasi.de
+      repo: registry.mafiasi.de/mattermost
+      username: agserver
+      password:
+        from_secret: REGISTRY_PW
+      context: mattermost
+      dockerfile: mattermost/Dockerfile
+      tags: 5.24.2
+      build_args:
+        - VERSION=5.24.2
+  - name: restart deployment
+    image: registry.mafiasi.de/deployment_restarter
+    settings:
+      namespace: mafiasi-prod
+      name: mattermost
+
