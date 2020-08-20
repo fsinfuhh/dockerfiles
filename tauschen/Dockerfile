@@ -6,7 +6,7 @@ ARG DIRECTORY_PATH=./directory
 # Install normal dependencies
 RUN apt-get update
 RUN apt-get -y --no-install-recommends install 'g++' gcc make wget uwsgi uwsgi-plugin-python3 python3 libldap2-dev libsasl2-dev libssl-dev python3-dev python3-pip python3-setuptools
-RUN pip3 install uWSGI
+RUN pip3 install wheel
 
 # Clean apt
 RUN apt-get -y autoremove
@@ -17,12 +17,13 @@ ADD $DIRECTORY_PATH /opt/directory
 ADD $TAUSCHEN_PATH/tauschen-backend /opt/tauschen/tauschen-backend
 
 # Setup backend
-RUN pip3 install wheel
+RUN pip3 install sentry-sdk uWSGI
 RUN pip3 install -r /opt/tauschen/tauschen-backend/requirements.txt
 RUN ln -sf /opt/config/settings.py /opt/tauschen/tauschen-backend/tauschen/settings.py
 RUN pip3 install /opt/directory
 
 FROM base as frontend
+ARG TAUSCHEN_PATH=./tauschen
 # Install nodejs
 RUN apt-get -y install npm
 RUN yes no | npm install yarn @angular/cli --global
