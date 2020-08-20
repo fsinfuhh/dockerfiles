@@ -109,5 +109,4 @@ steps:
     image: registry.mafiasi.de/deployment_restarter
     settings:
       namespace: mafiasi-prod
-      name: mattermost
-
+      name: mafiasi-mattermost
