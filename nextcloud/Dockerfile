@@ -32,9 +32,10 @@ RUN apt-get -y --no-install-recommends install \
     chown www-data /var/www/nextcloud/apps; \
     chown www-data /var/www/nextcloud/config
 
-RUN DIR="/var/www/nextcloud/apps/richdocuments"; \
-    git clone https://github.com/nextcloud/richdocuments.git $DIR ; \
-    git --git-dir=$DIR/.git --work-tree=$DIR checkout $(git --git-dir=$DIR/.git --work-tree=$DIR tag | tail -n1)
+# install richdocuments
+ARG RICHDOCUMENTS_VERSION=v3.7.3
+RUN wget -qO- https://github.com/nextcloud/richdocuments/releases/download/${RICHDOCUMENTS_VERSION}/richdocuments.tar.gz |\
+    tar -C /var/www/nextcloud/apps -xzv --no-same-owner
 
 RUN ln -sf /opt/config/config.php /var/www/nextcloud/config/config.php; \
     ln -sf /opt/config/www.conf /etc/php/7.3/fpm/pool.d/www.conf; \
