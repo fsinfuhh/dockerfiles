@@ -1,11 +1,11 @@
 FROM debian:stretch
 
 ENV UID=2007
-ENV VERSION=4.3.2
+ENV VERSION=5.0.0
 
 RUN useradd -u $UID -g nogroup sogo
 RUN apt update
-RUN apt-get --no-install-recommends -y install uwsgi memcached gnustep-make gnustep-base-runtime libgnustep-base-dev gobjc libxml2-dev libldap2-dev libssl-dev zlib1g-dev libpq-dev libmemcached-dev postgresql-client libcurl4-openssl-dev wget make libdpkg-perl
+RUN apt-get --no-install-recommends -y install uwsgi memcached gnustep-make gnustep-base-runtime libgnustep-base-dev gobjc libxml2-dev libldap2-dev libssl-dev zlib1g-dev libpq-dev libmemcached-dev postgresql-client libcurl4-openssl-dev wget make libdpkg-perl libsodium-dev pkg-config libzip-dev
 
 RUN mkdir /build
 WORKDIR /build
