@@ -18,12 +18,13 @@ RUN mkdir -p /var/www /run/php
 
 WORKDIR /var/www
 
-RUN wget https://download.limesurvey.org/lts-releases/limesurvey3.23.0+200813.zip -O limesurvey.zip
+RUN wget https://download.limesurvey.org/latest-stable-release/limesurvey4.3.14+200826.zip -O limesurvey.zip
 RUN unzip limesurvey.zip
 RUN rm -rf limesurvey/upload
 
 RUN mkdir -p /app/config /app/upload
 RUN ln -sf /app/config/config.php /var/www/limesurvey/application/config/config.php
+RUN ln -sf /app/config/security.php /var/www/limesurvey/application/config/security.php
 RUN ln -sf /app/upload /var/www/limesurvey/upload
 
 COPY nginx.conf /etc/nginx/sites-enabled/limesurvey.conf
