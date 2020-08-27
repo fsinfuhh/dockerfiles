@@ -1,5 +1,5 @@
 FROM registry.mafiasi.de/base-buster
-ARG VERSION=19
+ARG VERSION=19.0.2
 ARG UID=3001
 ARG GID=3001
 
@@ -27,10 +27,10 @@ RUN apt-get -y --no-install-recommends install \
 	    git \
 	    php-imagick; \
     mkdir /var/www ; \
-    wget -qO- https://download.nextcloud.com/server/releases/latest-${VERSION}.tar.bz2 | \
+    wget -qO- https://download.nextcloud.com/server/releases/nextcloud-${VERSION}.tar.bz2 | \
     tar -C /var/www -xjv --no-same-owner; \
-    chown www-data /var/www/nextcloud/apps; \
-    chown www-data /var/www/nextcloud/config
+    chown -R www-data /var/www/nextcloud/apps; \
+    chown -R www-data /var/www/nextcloud/config
 
 # install richdocuments
 ARG RICHDOCUMENTS_VERSION=v3.7.3
