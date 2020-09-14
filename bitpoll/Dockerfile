@@ -13,7 +13,7 @@ RUN apt-get install -y --no-install-recommends npm
 RUN npm install cssmin uglify-js -g
 
 RUN wget -nv https://github.com/fsinfuhh/Bitpoll/archive/master.tar.gz -O- | tar -xzC /opt
-RUN mv /opt/Bitpoll-feature_calendar /opt/bitpoll
+RUN mv /opt/Bitpoll-master /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
