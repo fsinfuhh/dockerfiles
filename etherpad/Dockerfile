@@ -1,4 +1,4 @@
-FROM node:14-buster
+FROM node:12-buster
 
 ENV VERSION=1.8.4
 
