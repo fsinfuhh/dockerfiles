@@ -1,6 +1,6 @@
 FROM node:12-buster
 
-ENV VERSION=1.8.4
+ENV VERSION=develop
 
 RUN mkdir -p /app/etherpad; \
     wget -nv https://github.com/ether/etherpad-lite/archive/$VERSION.tar.gz -O- | tar -C /app/etherpad --strip-components=1 -xz
