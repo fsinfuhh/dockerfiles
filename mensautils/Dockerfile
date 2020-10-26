@@ -9,7 +9,7 @@ RUN rm -rf /app/src/.pyenv
 WORKDIR /app/src
 
 RUN pip3 install -r requirements.txt
-RUN pip3 install psycopg2-binary django-ldapdb django-auth-ldap raven
+RUN pip3 install psycopg2-binary django-ldapdb django-auth-ldap sentry-sdk
 
 RUN ln -sf /app/config/settings.py /app/src/mensautils/settings.py
 
