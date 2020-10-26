@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Converse.js</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="converse.min.css">
+        <script src="converse.min.js"></script>
+        <script src="libsignal-protocol-javascript/libsignal-protocol.js"></script>
+        <script src="emojis.js"></script>
+    </head>
+    <body class="converse-fullscreen">
+        <div id="conversejs-bg"></div>
+        <script type="text/javascript">
+            converse.initialize({
+                auto_reconnect: true,
+                message_archiving: 'always',
+                omemo_default: true,
+                play_sounds: true,
+                view_mode: 'fullscreen',
+                websocket_url: undefined
+            });
+        </script>
+    </body>
+</html>
