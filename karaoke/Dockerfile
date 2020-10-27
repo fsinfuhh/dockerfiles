@@ -14,7 +14,7 @@ RUN pip3 install -r requirements.txt
 RUN python3 manage.py compilemessages
 RUN ln -sf /app/config/settings.py /app/src/MafiAStar/settings.py
 
-RUN apt purge -y --auto-remove g++ wget python3-dev python3-pip make gcc libldap2-dev libsasl2-dev
+#RUN apt purge -y --auto-remove g++ wget python3-dev python3-pip make gcc libldap2-dev libsasl2-dev
 
 COPY run /usr/local/bin
 COPY uwsgi-mafiastar.ini /etc/uwsgi/mafiastar.ini
