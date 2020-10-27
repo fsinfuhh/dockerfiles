@@ -17,7 +17,7 @@ RUN mv /opt/Bitpoll-master /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
-RUN pip3 install -U pip setuptools
+RUN pip3 install -U pip setuptools sentry-sdk
 RUN pip3 install -r requirements-production.txt
 RUN pip install requests  # for sentry
 RUN ln -sf /opt/static/ /opt/bitpoll/_static
