@@ -18,7 +18,7 @@ RUN mkdir -p /var/www /run/php
 
 WORKDIR /var/www
 
-RUN wget https://download.limesurvey.org/latest-stable-release/limesurvey4.3.14+200826.zip -O limesurvey.zip
+RUN wget https://download.limesurvey.org/latest-stable-release/limesurvey4.3.23+201026.zip -O limesurvey.zip
 RUN unzip limesurvey.zip
 RUN rm -rf limesurvey/upload
 
