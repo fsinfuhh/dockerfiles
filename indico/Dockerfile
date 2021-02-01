@@ -1,10 +1,10 @@
 FROM docker.io/debian:buster-slim
 
+ARG VERSION=2.3.3
 RUN apt update
 RUN apt install -y libpq-dev nginx python-dev python-pip libxslt1-dev libxml2-dev libffi-dev libpcre3-dev libyaml-dev build-essential uwsgi uwsgi-plugin-python libjpeg62-turbo-dev libsasl2-dev libldap2-dev libssl-dev
 
 RUN pip install uWSGI python-ldap
-ARG VERSION=2.3.2
 RUN pip install indico==$VERSION jsonschema==2.*
 
 ADD uwsgi.ini /etc/uwsgi/apps-enabled/indico.ini

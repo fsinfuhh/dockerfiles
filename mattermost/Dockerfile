@@ -1,6 +1,6 @@
 FROM registry.mafiasi.de/base-stretch
 
-ARG VERSION
+ARG VERSION=5.31.0
 
 RUN apt update
 RUN usermod -u 2003 -g nogroup www-data
