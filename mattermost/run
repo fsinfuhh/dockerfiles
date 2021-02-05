@@ -1,4 +1,11 @@
 #!/bin/sh
 export USER=www-data HOME=/home/www-data
 cd /opt/mattermost
+# This is a little bit hacky since mattermost requires write permissions to
+# the configuration file on updates. But mounted k8s secrets are read-only,
+# therefore we have to copy the file to the configuration folder instead of
+# linking it. To not get the files too much out of sync, we should save the
+# modified configuration file to the ansible repository every now and then.
+cp /opt/config/config.json /opt/mattermost/config/config.json
+chmod 666 /opt/mattermost/config/config.json
 exec /opt/mattermost/bin/mattermost
