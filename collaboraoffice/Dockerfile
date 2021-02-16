@@ -18,7 +18,6 @@ ARG UID_LOOL=2010
 RUN mkdir /opt/jails
 RUN usermod -u $UID_LOOL -g nogroup lool && \
 	chown lool /opt/jails && \
-	chown lool /var/cache/loolwsd && \
 	chown -hR lool /opt/collaboraoffice*/
 RUN ln -sf /opt/config/loolwsd.xml /etc/loolwsd/loolwsd.xml && \
 	ln -sf /var/log/collabora /opt/log
