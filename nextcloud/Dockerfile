@@ -1,5 +1,5 @@
 FROM registry.mafiasi.de/base-buster
-ARG VERSION=19.0.2
+ARG VERSION=20.0.8
 ARG UID=3001
 ARG GID=3001
 
@@ -33,7 +33,7 @@ RUN apt-get -y --no-install-recommends install \
     chown -R www-data /var/www/nextcloud/config
 
 # install richdocuments
-ARG RICHDOCUMENTS_VERSION=v3.7.3
+ARG RICHDOCUMENTS_VERSION=v4.0.1
 RUN wget -qO- https://github.com/nextcloud/richdocuments/releases/download/${RICHDOCUMENTS_VERSION}/richdocuments.tar.gz |\
     tar -C /var/www/nextcloud/apps -xzv --no-same-owner
 
