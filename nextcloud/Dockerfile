@@ -33,7 +33,7 @@ RUN apt-get -y --no-install-recommends install \
     chown -R www-data /var/www/nextcloud/config
 
 # install richdocuments
-ARG RICHDOCUMENTS_VERSION=v4.0.1
+ARG RICHDOCUMENTS_VERSION=v3.7.15
 RUN wget -qO- https://github.com/nextcloud/richdocuments/releases/download/${RICHDOCUMENTS_VERSION}/richdocuments.tar.gz |\
     tar -C /var/www/nextcloud/apps -xzv --no-same-owner
 
