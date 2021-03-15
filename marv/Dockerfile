@@ -35,6 +35,7 @@ RUN apt -y autoremove; apt clean
 COPY run /usr/local/bin/run
 COPY update_db /usr/local/bin/update_db
 COPY uwsgi.ini /etc/uwsgi/marv.ini
+RUN echo 'source /opt/ros/melodic/setup.bash' >> /etc/bash.bashrc
 
 VOLUME /opt/scanroot /opt/config /opt/log
 USER www-data:www-data
