@@ -14,7 +14,7 @@ pyasn1==0.1.7
 pyldap==2.4.37
 python3-ldap==0.9.4.2
 pytz==2017.2
-requests==2.4.3
+requests==2.20.0
 sentry-sdk==0.19.1
 six==1.8.0
 uWSGI==2.0.15
