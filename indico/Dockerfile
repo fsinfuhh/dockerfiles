@@ -1,6 +1,6 @@
 FROM docker.io/debian:buster-slim
 
-ARG VERSION=2.3.3
+ARG VERSION=2.3.5
 RUN apt update
 RUN apt install -y libpq-dev nginx python-dev python-pip libxslt1-dev libxml2-dev libffi-dev libpcre3-dev libyaml-dev build-essential uwsgi uwsgi-plugin-python libjpeg62-turbo-dev libsasl2-dev libldap2-dev libssl-dev
 
