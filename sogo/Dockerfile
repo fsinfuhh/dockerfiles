@@ -16,8 +16,13 @@ RUN ./configure --with-gnustep --disable-mysql
 RUN make; make install
 
 WORKDIR /build
-RUN wget -q https://github.com/inverse-inc/sogo/archive/SOGo-$VERSION.tar.gz -O- | tar -xz
-WORKDIR /build/sogo-SOGo-$VERSION
+RUN apt install -y git
+RUN git clone https://github.com/inverse-inc/sogo
+#RUN wget -q https://github.com/inverse-inc/sogo/archive/SOGo-$VERSION.tar.gz -O- | tar -xz
+#WORKDIR /build/sogo-SOGo-$VERSION
+WORKDIR /build/sogo
+RUN git checkout SOGo-$VERSION
+RUN git revert --no-commit 6aca61d8aef4f34e45b480ce3bae19318bc0e685
 RUN ./configure; make; make install
 
 WORKDIR /
