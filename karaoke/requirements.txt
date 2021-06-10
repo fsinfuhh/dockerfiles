@@ -1,6 +1,6 @@
 # This file contains pinned requirements from the old container
 DateTime==4.2
-Django==1.11.29
+Django==2.2.24
 chardet==2.3.0
 colorama==0.3.2
 django-auth-ldap==1.2.16
