@@ -13,8 +13,6 @@ RUN pip3 install psycopg2-binary django-ldapdb django-auth-ldap sentry-sdk
 
 RUN ln -sf /app/config/settings.py /app/src/mensautils/settings.py
 
-RUN apt purge -y --autoremove python3-pip python3-wheel gcc make libldap2-dev libsasl2-dev python3-dev
-
 COPY uwsgi-mensautils.ini /etc/uwsgi/mensautils.ini
 COPY run /usr/local/bin/run
 
