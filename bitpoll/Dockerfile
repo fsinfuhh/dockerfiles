@@ -9,14 +9,14 @@ RUN apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-pytho
 
 RUN npm install cssmin uglify-js -g
 
-RUN wget -nv https://github.com/fsinfuhh/Bitpoll/archive/master.tar.gz -O- | tar -xzC /opt
+ADD https://github.com/fsinfuhh/Bitpoll/archive/master.tar.gz /opt/bitpoll.tar.gz
+RUN tar -xzC /opt -f /opt/bitpoll.tar.gz
 RUN mv /opt/Bitpoll-master /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
-RUN pip3 install -U pip setuptools sentry-sdk
+RUN pip3 install -U pip setuptools
 RUN pip3 install -r requirements-production.txt
-RUN pip install requests  # for sentry
 RUN ln -sf /opt/static/ /opt/bitpoll/_static
 RUN cp bitpoll/settings_local.sample.py bitpoll/settings_local.py
 RUN python3 manage.py compilemessages
@@ -26,9 +26,6 @@ RUN rm bitpoll/settings_local.py
 
 RUN ln -sf /opt/config/settings.py /opt/bitpoll/bitpoll/settings_local.py
 RUN ln -sf /opt/storage/media /opt/bitpoll/_media
-RUN apt-get -y purge yui-compressor git python-pip make gcc python-dev libldap2-dev libsasl2-dev curl gpg
-RUN apt-get -y autoremove
-RUN apt-get clean
 
 ARG RELEASE_VERSION=2019.12.05
 RUN echo $RELEASE_VERSION > /opt/bitpoll/.releaseversion
