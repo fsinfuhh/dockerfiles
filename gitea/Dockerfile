@@ -1,12 +1,12 @@
-FROM registry.mafiasi.de/base-buster
+FROM debian:bullseye-slim
 
-ENV VERSION=1.14.2
+ENV VERSION=1.15.6
 ENV UID=2001
 
 RUN useradd -u $UID -g nogroup git -d /home/gitea -m
 
 RUN apt update
-RUN apt-get --no-install-recommends -y install git openssl openssh-client openssh-server wget xz-utils
+RUN apt-get --no-install-recommends -y install ca-certificates git openssl openssh-client openssh-server wget xz-utils
 
 RUN mkdir /opt/gitea; \
     chown -R git:nogroup /opt
@@ -18,6 +18,7 @@ RUN wget -q https://github.com/go-gitea/gitea/releases/download/v$VERSION/gitea-
 RUN mkdir -p /opt/gitea/custom/conf
 RUN ln -sf /opt/config/app.ini /opt/gitea/custom/conf/
 RUN ln -s /opt/storage/data /opt/gitea/data
+RUN mkdir /opt/log; chown git /opt/log
 
 USER root
 RUN usermod -d /opt/storage/gituser git
@@ -25,5 +26,5 @@ RUN echo "AcceptEnv SSH_ORIGINAL_COMMAND" >> /etc/ssh/sshd_config
 
 COPY run /usr/local/bin/run
 EXPOSE 3005/tcp 3006/tcp
-VOLUME /opt/storage /opt/config /opt/log
+VOLUME /opt/storage /opt/config
 ENTRYPOINT /usr/local/bin/run
