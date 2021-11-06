@@ -1,12 +1,12 @@
-FROM debian:bullseye-slim
+FROM registry.mafiasi.de/base-bullseye
 
 ENV VERSION=1.15.6
 ENV UID=2001
 
 RUN useradd -u $UID -g nogroup git -d /home/gitea -m
 
-RUN apt update
-RUN apt-get --no-install-recommends -y install ca-certificates git openssl openssh-client openssh-server wget xz-utils
+RUN apt update; \
+    apt-get --no-install-recommends -y install git openssl openssh-client openssh-server wget xz-utils
 
 RUN mkdir /opt/gitea; \
     chown -R git:nogroup /opt
@@ -15,10 +15,10 @@ WORKDIR /opt/gitea
 RUN wget -q https://github.com/go-gitea/gitea/releases/download/v$VERSION/gitea-$VERSION-linux-amd64.xz -O- | xz -d > gitea; \
     chmod +x gitea
 
-RUN mkdir -p /opt/gitea/custom/conf
-RUN ln -sf /opt/config/app.ini /opt/gitea/custom/conf/
-RUN ln -s /opt/storage/data /opt/gitea/data
-RUN mkdir /opt/log; chown git /opt/log
+RUN mkdir -p /opt/gitea/custom/conf; \
+    ln -sf /opt/config/app.ini /opt/gitea/custom/conf/; \
+    ln -s /opt/storage/data /opt/gitea/data; \
+    chown git /opt/log
 
 USER root
 RUN usermod -d /opt/storage/gituser git
