@@ -18,6 +18,6 @@ requests==2.20.0
 sentry-sdk==0.19.1
 six==1.8.0
 uWSGI==2.0.15
-urllib3==1.9.1
+urllib3==1.26.5
 virtualenv==1.11.6
 zope.interface==4.4.3
