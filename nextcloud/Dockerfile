@@ -8,25 +8,27 @@ RUN usermod -u $UID -g $GID -d /var/www/ www-data
 
 RUN apt-get -y --no-install-recommends install \
         nginx \
-	    wget \
-	    php7.4-fpm \
-	    php7.4 \
-	    php7.4-gd \
-	    php7.4-intl \
-	    php7.4-pgsql \
-	    php7.4-apcu \
-	    php7.4-curl \
-	    php7.4-memcache \
-	    php7.4-redis \
-	    php7.4-ldap \
-	    php7.4-xml \
-	    php7.4-zip \
-	    php7.4-json \
-	    php7.4-mbstring \
-	    strace \
-	    bzip2 \
-	    git \
-	    php-imagick; \
+        wget \
+        php7.4 \
+        php7.4-apcu \
+        php7.4-curl \
+        php7.4-fpm \
+        php7.4-gd \
+        php7.4-intl \
+        php7.4-json \
+        php7.4-ldap \
+        php7.4-mbstring \
+        php7.4-memcache \
+        php7.4-pgsql \
+        php7.4-redis \
+        php7.4-xml \
+        php7.4-zip \
+        php7.4-bcmath \
+        php7.4-gmp \
+        strace \
+        bzip2 \
+        git \
+        php-imagick; \
     mkdir /var/www ; \
     wget -qO- https://download.nextcloud.com/server/releases/nextcloud-${VERSION}.tar.bz2 | \
     tar -C /var/www -xj --no-same-owner; \

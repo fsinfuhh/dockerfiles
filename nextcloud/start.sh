@@ -1,6 +1,6 @@
 #!/bin/sh
 cp /opt/config/config.php /var/www/nextcloud/config/config.php
-chown -R www-data /var/www/nextcloud/config /opt/log
+chown -R www-data /var/www/nextcloud/config /var/www/nextcloud/apps /opt/log
 
 nginx
 
