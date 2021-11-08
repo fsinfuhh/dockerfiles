@@ -49,7 +49,7 @@ RUN ln -sf /opt/config/nginx.conf /etc/nginx/sites-enabled/default; \
       echo 'opcache.save_comments=1'; \
       echo 'opcache.revalidate_freq=1'; \
     } >> /etc/php/7.4/fpm/php.ini; \
-    echo 'apc.enable_cli=1' >> /etp/php/7.4/mods-available/apcu.ini; \
+    echo 'apc.enable_cli=1' >> /etc/php/7.4/mods-available/apcu.ini; \
     sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.4/fpm/php.ini
 
 RUN chown www-data /opt/config
