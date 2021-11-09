@@ -11,7 +11,7 @@ WORKDIR /opt/karma
 RUN pip3 install pipenv
 ENV PIPENV_VENV_IN_PROJECT=1
 RUN pipenv sync
-RUN pipenv install psycopg2-binary django-ldapdb django-auth-ldap uwsgi raven requests
+RUN pipenv install psycopg2-binary django-ldapdb django-auth-ldap uwsgi requests sentry-sdk
 
 RUN ln -sf /opt/config/settings.py /opt/karma/karma/settings.py
 RUN ln -sf /opt/static/ /opt/karma/_static
