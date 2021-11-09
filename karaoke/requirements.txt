@@ -1,5 +1,5 @@
 # This file contains pinned requirements from the old container
-Django==1.11.29
+Django==2.2.24
 django-auth-ldap==1.2.16
 django-guardian==1.4.9
 django-ldapdb==0.9.0
