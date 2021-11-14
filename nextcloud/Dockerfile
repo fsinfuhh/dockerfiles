@@ -40,6 +40,11 @@ ARG RICHDOCUMENTS_VERSION=v4.1.2
 RUN wget -qO- https://github.com/nextcloud/richdocuments/releases/download/${RICHDOCUMENTS_VERSION}/richdocuments.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
+# install deck app
+ARG DECK_VERSION=v1.4.7
+RUN wget -qO- https://github.com/nextcloud/deck/releases/download/${DECK_VERSION}/deck.tar.gz |\
+    tar -C /var/www/nextcloud/apps -xz --no-same-owner
+
 RUN ln -sf /opt/config/nginx.conf /etc/nginx/sites-enabled/default; \
     ln -sf /opt/config/www.conf /etc/php/7.4/fpm/pool.d/www.conf; \
     ln -s /var/log/php7.4-fpm.log /opt/log/php7.4-fpm.error.log; \
