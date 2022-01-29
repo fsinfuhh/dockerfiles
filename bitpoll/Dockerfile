@@ -15,7 +15,7 @@ RUN mv /opt/Bitpoll-master /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
-RUN pip3 install -U pip setuptools
+RUN pip3 install -U pip setuptools wheel
 RUN pip3 install -r requirements-production.txt
 RUN ln -sf /opt/static/ /opt/bitpoll/_static
 RUN cp bitpoll/settings_local.sample.py bitpoll/settings_local.py
