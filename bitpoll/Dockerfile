@@ -38,5 +38,4 @@ VOLUME /opt/static
 VOLUME /opt/config
 VOLUME /opt/log
 
-USER www-data:nogroup
 ENTRYPOINT /usr/local/bin/run
