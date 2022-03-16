@@ -1,7 +1,7 @@
-FROM debian:buster
+FROM docker.io/debian:bullseye
 
 RUN apt update
-RUN apt -y --no-install-recommends install python3 python3-pip python3-setuptools python3-wheel build-essential libldap2-dev python3-dev libsasl2-dev libpython3.7
+RUN apt -y --no-install-recommends install python3 python3-pip python3-setuptools python3-wheel build-essential libldap2-dev python3-dev libsasl2-dev libpython3.9
 
 COPY join.oeinf.de /opt/joinoeinf
 RUN usermod -u 101 -g 33 -d /opt/joinoeinf www-data
