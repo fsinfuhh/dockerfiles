@@ -1,5 +1,5 @@
 FROM registry.mafiasi.de/base-bullseye
-ARG VERSION=21.0.5
+ARG VERSION=24.0.1
 ARG UID=3001
 ARG GID=3001
 
@@ -36,7 +36,7 @@ RUN apt-get -y --no-install-recommends install \
     chown -R www-data /var/www/nextcloud/config
 
 # install richdocuments
-ARG RICHDOCUMENTS_VERSION=v4.1.2
+ARG RICHDOCUMENTS_VERSION=v6.0.0
 RUN wget -qO- https://github.com/nextcloud/richdocuments/releases/download/${RICHDOCUMENTS_VERSION}/richdocuments.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 

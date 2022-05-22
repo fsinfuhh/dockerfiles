@@ -1,6 +1,6 @@
 FROM registry.mafiasi.de/base-bullseye
 
-ARG VERSION=6.0.2
+ARG VERSION=6.7.0
 
 RUN apt update; \
     usermod -u 2003 -g nogroup www-data; \
