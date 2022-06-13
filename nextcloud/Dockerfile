@@ -41,7 +41,7 @@ RUN wget -qO- https://github.com/nextcloud/richdocuments/releases/download/${RIC
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
 # install deck app
-ARG DECK_VERSION=v1.4.7
+ARG DECK_VERSION=v1.7.0
 RUN wget -qO- https://github.com/nextcloud/deck/releases/download/${DECK_VERSION}/deck.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
