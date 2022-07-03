@@ -1,17 +1,17 @@
 #sentry-cli releases -o sentry-internal new -p bitpoll $VERSION
-FROM debian:buster
+FROM debian:bullseye
 
 ENV UID=2008
 
 RUN usermod -u $UID -g nogroup -d /opt/bitpoll www-data
 RUN apt update
-RUN apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python3 python3 python-virtualenv python3-pip virtualenv make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev gpg gpg-agent curl libsasl2-dev npm
+RUN apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python3 python3 python3-virtualenv python3-pip virtualenv make git python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev gpg gpg-agent curl libsasl2-dev npm
 
 RUN npm install cssmin uglify-js -g
 
-ADD https://github.com/fsinfuhh/Bitpoll/archive/master.tar.gz /opt/bitpoll.tar.gz
+ADD https://github.com/fsinfuhh/Bitpoll/archive/fix/privacy-policy.tar.gz /opt/bitpoll.tar.gz
 RUN tar -xzC /opt -f /opt/bitpoll.tar.gz
-RUN mv /opt/Bitpoll-master /opt/bitpoll
+RUN mv /opt/Bitpoll-fix-privacy-policy /opt/bitpoll
 
 WORKDIR /opt/bitpoll
 
