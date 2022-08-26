@@ -1,5 +1,5 @@
 FROM registry.mafiasi.de/base-bullseye
-ARG VERSION=24.0.1
+ARG VERSION=24.0.4
 ARG UID=3001
 ARG GID=3001
 
@@ -27,16 +27,15 @@ RUN apt-get -y --no-install-recommends install \
         php7.4-gmp \
         strace \
         bzip2 \
-        git \
         php-imagick; \
-    mkdir /var/www ; \
+    mkdir -p /var/www ; \
     wget -qO- https://download.nextcloud.com/server/releases/nextcloud-${VERSION}.tar.bz2 | \
     tar -C /var/www -xj --no-same-owner; \
     chown -R www-data /var/www/nextcloud/apps; \
     chown -R www-data /var/www/nextcloud/config
 
 # install richdocuments
-ARG RICHDOCUMENTS_VERSION=v6.0.0
+ARG RICHDOCUMENTS_VERSION=v6.1.1
 RUN wget -qO- https://github.com/nextcloud/richdocuments/releases/download/${RICHDOCUMENTS_VERSION}/richdocuments.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
@@ -61,10 +60,6 @@ RUN ln -sf /opt/config/nginx.conf /etc/nginx/sites-enabled/default; \
 
 RUN chown www-data /opt/config
 
-RUN apt-get purge git* --yes --auto-remove; \
-    apt-get clean
-
-#USER www-data:nogroup
 ADD start.sh /usr/local/bin/run
 VOLUME /opt/storage /opt/config /opt/log /opt/static
 EXPOSE 9787/tcp

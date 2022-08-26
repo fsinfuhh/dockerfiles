@@ -1,6 +1,6 @@
 FROM registry.mafiasi.de/base-bullseye
 
-ENV VERSION=1.15.6
+ENV VERSION=1.17.1
 ENV UID=2001
 
 RUN useradd -u $UID -g nogroup git -d /home/gitea -m
