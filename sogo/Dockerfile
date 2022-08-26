@@ -1,36 +1,26 @@
-FROM debian:stretch
+FROM registry.mafiasi.de/base-bullseye
 
 ENV UID=2007
-ENV VERSION=5.1.0
+ENV VERSION=5.7.1
 
 RUN useradd -u $UID -g nogroup sogo
 RUN apt update
-RUN apt-get --no-install-recommends -y install uwsgi memcached gnustep-make gnustep-base-runtime libgnustep-base-dev gobjc libxml2-dev libldap2-dev libssl-dev zlib1g-dev libpq-dev libmemcached-dev postgresql-client libcurl4-openssl-dev wget make libdpkg-perl libsodium-dev pkg-config libzip-dev
+RUN apt-get --no-install-recommends -y install uwsgi memcached gnustep-make gnustep-base-runtime libgnustep-base-dev gobjc libxml2-dev libldap2-dev libssl-dev zlib1g-dev libpq-dev libmemcached-dev postgresql-client libcurl4-openssl-dev wget make libdpkg-perl libsodium-dev pkg-config libzip-dev libytnef-dev patch
 
-RUN mkdir /build
-WORKDIR /build
+RUN mkdir /build && cd /build && \
+    wget -q https://github.com/inverse-inc/sope/archive/SOPE-$VERSION.tar.gz -O- | tar -xz && \
+    cd /build/sope-SOPE-$VERSION && \
+    ./configure --with-gnustep --disable-mysql && \
+    make && make install
 
-RUN wget -q https://github.com/inverse-inc/sope/archive/SOPE-$VERSION.tar.gz -O- | tar -xz
-WORKDIR /build/sope-SOPE-$VERSION
-RUN ./configure --with-gnustep --disable-mysql
-RUN make; make install
-
-WORKDIR /build
-RUN apt install -y git
-RUN git clone https://github.com/inverse-inc/sogo
-#RUN wget -q https://github.com/inverse-inc/sogo/archive/SOGo-$VERSION.tar.gz -O- | tar -xz
-#WORKDIR /build/sogo-SOGo-$VERSION
-WORKDIR /build/sogo
-RUN git checkout SOGo-$VERSION
-RUN git revert --no-commit 6aca61d8aef4f34e45b480ce3bae19318bc0e685
-RUN ./configure; make; make install
-
-WORKDIR /
-RUN rm -r /build
-
-RUN apt-get -y remove wget make
-RUN apt-get clean
-RUN apt-get autoclean
+ADD ldap_fix.patch /
+RUN cd /build && \
+    wget -q https://github.com/inverse-inc/sogo/archive/SOGo-$VERSION.tar.gz -O- | tar -xz && \
+    cd sogo-SOGo-$VERSION && \
+    patch -p1 < /ldap_fix.patch && \
+    ./configure && make && make install && \
+    cd / && \
+    rm -rf /build || rm -rf /build  # Sometimes, first rm fails for unknown reasons
 
 RUN install -o sogo -g nogroup -m 750 -d /var/spool/sogo /etc/sogo
 RUN ln -sf /opt/config/sogo.conf /etc/sogo/sogo.conf
