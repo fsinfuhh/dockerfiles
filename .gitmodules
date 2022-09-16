@@ -10,3 +10,6 @@
 [submodule "preoerb/oerb"]
 	path = preoerb/oerb
 	url = git@git.mafiasi.de:oe/oerb.git
+[submodule "oestatus/oestatus-v3"]
+	path = oestatus/oestatus-v3
+	url = git@git.mafiasi.de:oe/oestatus-v3.git
