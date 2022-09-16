@@ -7,3 +7,6 @@
 [submodule "pizza"]
 	path = pizza
 	url = git@github.com:SocialSaturdayCoding/Apos-Container.git
+[submodule "preoerb/oerb"]
+	path = preoerb/oerb
+	url = git@git.mafiasi.de:oe/oerb.git
