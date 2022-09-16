@@ -19,3 +19,6 @@
 [submodule "stammbaum/stammbaum"]
 	path = stammbaum/stammbaum
 	url = git@git.mafiasi.de:oe/stammbaum.git
+[submodule "mensautils/mensa-utils"]
+	path = mensautils/mensa-utils
+	url = git@git.mafiasi.de:mafiasi-ag/mensa-utils.git
