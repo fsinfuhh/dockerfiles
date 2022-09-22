@@ -22,3 +22,7 @@
 [submodule "mensautils/mensa-utils"]
 	path = mensautils/mensa-utils
 	url = git@git.mafiasi.de:mafiasi-ag/mensa-utils.git
+[submodule "familiendoell/familiendOEll-auswerter"]
+	path = familiendoell/familiendOEll-auswerter
+	url = git@git.mafiasi.de:oe/familiendOEll-auswerter.git
+	branch = master
