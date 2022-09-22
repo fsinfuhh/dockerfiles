@@ -1,5 +1,0 @@
-#!/bin/sh
-export USER=www-data HOME=/home/www-data
-python3 /opt/familiendoell/familiendoellauswerter/manage.py migrate
-python3 /opt/familiendoell/familiendoellauswerter/manage.py collectstatic --noinput
-exec uwsgi /etc/uwsgi/familiendoell.ini
