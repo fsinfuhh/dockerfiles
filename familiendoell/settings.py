@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ti&0-92sqf7z=gs+589xzqd54xeok-v!)1x09m5!syjszt0^x+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["familiendoell.oe.mafiasi.de", "localhost"]
 
@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'familiendoellauswerter.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(os.path.dirname(BASE_DIR), 'db.sqlite3'),
+        'NAME': os.path.join(os.path.dirname(BASE_DIR), "storage", 'db.sqlite3'),
     }
 }
 
