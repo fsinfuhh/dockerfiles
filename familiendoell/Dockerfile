@@ -1,5 +1,8 @@
 FROM docker.io/tiangolo/uwsgi-nginx:python3.9
 
+# prepare container
+RUN pip3 install psycopg2-binary
+
 # add application code
 COPY prestart.sh /app/prestart.sh
 COPY nginx.conf /app/nginx.conf

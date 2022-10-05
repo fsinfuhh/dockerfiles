@@ -82,8 +82,12 @@ WSGI_APPLICATION = 'familiendoellauswerter.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(os.path.dirname(BASE_DIR), "storage", 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'familiendoell',
+        'USER': 'familiendoell',
+        'PASSWORD': 'qBjSJimf9hpiLHHxML5xFL9LBFDR',
+        'HOST': 'fsdb.informatik.uni-hamburg.de',
+        'PORT': '5432',
     }
 }
 
