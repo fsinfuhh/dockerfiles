@@ -10,12 +10,8 @@ COPY uwsgi.ini /app/uwsgi.ini
 COPY ./familiendOEll-auswerter/requirements.txt /app/src/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /app/src/requirements.txt
 COPY ./familiendOEll-auswerter/familiendoellauswerter/ /app/src/
-COPY settings.py /app/src/familiendoellauswerter/settings.py
-
-RUN python3 /app/src/manage.py collectstatic --noinput
+RUN ln -sf /app/config/settings.py /app/src/familiendoellauswerter/settings.py
 
 # configure image
 ENV UWSGI_INI /app/uwsgi.ini
 EXPOSE 80/tcp
-
-

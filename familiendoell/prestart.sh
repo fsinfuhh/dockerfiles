@@ -3,4 +3,4 @@ set -e
 
 mkdir -p /app/storage
 python3 /app/src/manage.py migrate
-
+python3 /app/src/manage.py collectstatic --noinput
