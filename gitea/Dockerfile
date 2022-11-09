@@ -1,14 +1,14 @@
-FROM registry.mafiasi.de/base-bullseye
+FROM debian:bullseye-slim
 
-ENV VERSION=1.17.1
+ENV VERSION=1.17.3
 ENV UID=2001
 
 RUN useradd -u $UID -g nogroup git -d /home/gitea -m
 
 RUN apt update; \
-    apt-get --no-install-recommends -y install git openssl openssh-client openssh-server wget xz-utils
+    apt-get --no-install-recommends -y install git openssl openssh-client openssh-server wget xz-utils ca-certificates vim
 
-RUN mkdir /opt/gitea; \
+RUN mkdir /opt/gitea /opt/config /opt/storage /opt/log; \
     chown -R git:nogroup /opt
 USER git
 WORKDIR /opt/gitea
