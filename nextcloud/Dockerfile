@@ -1,4 +1,4 @@
-FROM registry.mafiasi.de/base-bullseye
+FROM debian:bullseye-slim
 ARG VERSION=24.0.4
 ARG UID=3001
 ARG GID=3001
@@ -6,7 +6,10 @@ ARG GID=3001
 RUN groupmod -g $GID www-data
 RUN usermod -u $UID -g $GID -d /var/www/ www-data
 
-RUN apt-get -y --no-install-recommends install \
+RUN apt-get update; \
+    apt-get -y --no-install-recommends install \
+        vim \
+        ca-certificates \
         nginx \
         wget \
         php7.4 \
