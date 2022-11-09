@@ -31,7 +31,7 @@ RUN apt-get update; \
         strace \
         bzip2 \
         php-imagick; \
-    mkdir -p /var/www ; \
+    mkdir -p /var/www /opt/config /opt/static /opt/log; \
     wget -qO- https://download.nextcloud.com/server/releases/nextcloud-${VERSION}.tar.bz2 | \
     tar -C /var/www -xj --no-same-owner; \
     chown -R www-data /var/www/nextcloud/apps; \
