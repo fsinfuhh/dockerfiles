@@ -26,3 +26,6 @@
 	path = familiendoell/familiendOEll-auswerter
 	url = git@git.mafiasi.de:oe/familiendOEll-auswerter.git
 	branch = master
+[submodule "engelsystem/engelsystem"]
+	path = engelsystem/engelsystem
+	url = git@github.com:engelsystem/engelsystem.git
