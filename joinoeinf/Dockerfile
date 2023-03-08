@@ -9,7 +9,7 @@ RUN usermod -u 101 -g 33 -d /opt/joinoeinf www-data
 WORKDIR /opt/joinoeinf
 
 RUN pip3 install -r requirements.txt
-RUN pip3 install uwsgi psycopg2-binary==2.8.6
+RUN pip3 install uwsgi psycopg2-binary==2.9.5
 
 RUN ln -sf /opt/config/settings.py /opt/joinoeinf/join_oeinf/settings.py
 RUN ln -sf /opt/static/ /opt/joinoeinf/static
