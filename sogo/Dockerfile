@@ -1,7 +1,7 @@
 FROM registry.mafiasi.de/base-bullseye
 
 ENV UID=2007
-ENV VERSION=5.7.1
+ENV VERSION=5.8.2
 
 RUN useradd -u $UID -g nogroup sogo
 RUN apt update
