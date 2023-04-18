@@ -1,5 +1,5 @@
 FROM debian:bullseye-slim
-ARG VERSION=24.0.4
+ARG VERSION=25.0.5
 ARG UID=3001
 ARG GID=3001
 
@@ -38,12 +38,13 @@ RUN apt-get update; \
     chown -R www-data /var/www/nextcloud/config
 
 # install richdocuments
-ARG RICHDOCUMENTS_VERSION=v6.1.1
-RUN wget -qO- https://github.com/nextcloud/richdocuments/releases/download/${RICHDOCUMENTS_VERSION}/richdocuments.tar.gz |\
-    tar -C /var/www/nextcloud/apps -xz --no-same-owner
+ARG RICHDOCUMENTS_VERSION=v7.1.3
+RUN mkdir /var/www/nextcloud/apps/richdocuments && \
+    wget -qO- https://github.com/nextcloud/richdocuments/archive/refs/tags/${RICHDOCUMENTS_VERSION}.tar.gz |\
+    tar -C /var/www/nextcloud/apps/richdocuments --strip-components 1 -xz --no-same-owner
 
 # install deck app
-ARG DECK_VERSION=v1.7.0
+ARG DECK_VERSION=v1.9.0
 RUN wget -qO- https://github.com/nextcloud/deck/releases/download/${DECK_VERSION}/deck.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
