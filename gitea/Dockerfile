@@ -1,6 +1,6 @@
 FROM debian:bullseye-slim
 
-ENV VERSION=1.19.1
+ENV VERSION=1.19.2
 ENV UID=2001
 
 RUN useradd -u $UID -g nogroup git -d /home/gitea -m
