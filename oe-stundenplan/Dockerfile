@@ -31,7 +31,7 @@ ADD nginx.conf /etc/nginx/sites-enabled/default
 
 RUN usermod -u 2009 -g 33 -d /app/backend www-data
 
-ENV STUNDENPLAN_STATIC=app/static
+ENV STUNDENPLAN_STATIC=/app/static/static
 
 #USER www-data:www-data
 CMD /usr/local/bin/run
