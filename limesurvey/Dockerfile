@@ -1,4 +1,4 @@
-FROM registry.mafiasi.de/base-bullseye
+FROM ghcr.io/fsinfuhh/base-bullseye
 
 RUN apt install -y --no-install-recommends \
     wget \
