@@ -1,4 +1,4 @@
-FROM registry.mafiasi.de/base-bullseye
+FROM ghcr.io/fsinfuhh/base-bullseye
 
 ENV UID=2007
 ENV VERSION=5.8.2

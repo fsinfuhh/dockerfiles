@@ -1,0 +1,43 @@
+name: build all containers
+on:
+  push:
+    branches: [ master ]
+  schedule:
+    - cron: "0 3 * * 1"   # every monday
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build_base_containers:
+    name: Build Base Containers
+    strategy:
+      fail-fast: true
+      matrix:
+        container:
+          - base-bullseye
+          - base-buster
+    uses: ./.github/workflows/build_single_container.yml
+    secrets: inherit
+    with:
+      container: ${{ matrix.container }}
+
+  build_app_containers:
+    name: Build App Containers
+    needs: [ build_base_containers ]
+    strategy:
+      fail-fast: false
+      matrix:
+        container:
+          - bitpoll
+          - etherpad
+          - gitea
+          - karma
+          - limesurvey
+          - nextcloud
+          - sogo
+    uses: ./.github/workflows/build_single_container.yml
+    secrets: inherit
+    with:
+      container: ${{ matrix.container }}
