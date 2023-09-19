@@ -1,3 +1,0 @@
-#!/bin/bash
-murmurd -ini /app/config/mumble-server.ini
-python2 /app/LDAPauth.py -i /app/config/LDAPauth.ini -a

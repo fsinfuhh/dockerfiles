@@ -1,4 +1,4 @@
-FROM ghcr.io/fsinfuhh/base-bullseye
+FROM debian:bullseye-slim
 
 ENV UID=2007
 ENV VERSION=5.8.2

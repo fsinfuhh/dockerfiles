@@ -4,9 +4,6 @@
 [submodule "tauschen/directory"]
 	path = tauschen/directory
 	url = git@git.mafiasi.de:mafiasi-ag/mafiasi-directory.git
-[submodule "pizza"]
-	path = pizza
-	url = git@github.com:SocialSaturdayCoding/Apos-Container.git
 [submodule "joinoeinf/join.oeinf.de"]
 	path = joinoeinf/join.oeinf.de
 	url = git@git.mafiasi.de:oe/join.oeinf.de.git

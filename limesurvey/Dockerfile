@@ -1,4 +1,4 @@
-FROM ghcr.io/fsinfuhh/base-bullseye
+FROM debian:bullseye-slim
 
 RUN apt install -y --no-install-recommends \
     wget \

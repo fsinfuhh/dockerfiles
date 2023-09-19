@@ -1,4 +1,4 @@
-FROM ghcr.io/fsinfuhh/base-bullseye
+FROM debian:bullseye-slim
 
 RUN apt-get -y --no-install-recommends install g++ wget uwsgi uwsgi-plugin-python3 python3 python3-pip python3-six make python3-psycopg2 python3-ldap3 gettext gcc python3-dev libldap2-dev libsasl2-dev libldap-2.4-2 libsasl2-2
 
