@@ -2,8 +2,6 @@
 
 In diesem Git werden die Skripte zum Bauen der mafiasi-Container gesammelt.
 
-`base-buster` und `base-jessie` sind Basis-Images. Diese besteht aus einem minimalen Debian mit vim.
-
 Alle Images können mit `podman` oder `docker` gebaut werden, z. B. so:
 
 ```
