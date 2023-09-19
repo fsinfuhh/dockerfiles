@@ -1,16 +1,17 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
-RUN apt install -y --no-install-recommends \
+RUN apt update && apt install -y --no-install-recommends \
+    ca-certificates \
     wget \
-    php7.4 \
-    php7.4-fpm \
-    php7.4-gd \
-    php7.4-imap \
-    php7.4-ldap \
-    php7.4-mbstring \
-    php7.4-pdo-pgsql \
-    php7.4-xml \
-    php7.4-zip \
+    php8.2 \
+    php8.2-fpm \
+    php8.2-gd \
+    php8.2-imap \
+    php8.2-ldap \
+    php8.2-mbstring \
+    php8.2-pdo-pgsql \
+    php8.2-xml \
+    php8.2-zip \
     nginx \
     unzip
 
@@ -18,7 +19,8 @@ RUN mkdir -p /var/www /run/php
 
 WORKDIR /var/www
 
-ARG LIMESURVEY_RELEASE=https://download.limesurvey.org/latest-stable-release/limesurvey5.4.0+220913.zip
+# Get download URL here: https://community.limesurvey.org/downloads/
+ARG LIMESURVEY_RELEASE=https://download.limesurvey.org/latest-master/limesurvey6.2.7+230918.zip
 RUN wget $LIMESURVEY_RELEASE -O limesurvey.zip
 RUN unzip limesurvey.zip
 RUN rm -rf limesurvey/upload
@@ -30,7 +32,7 @@ RUN ln -sf /app/upload /var/www/limesurvey/upload
 RUN chmod o+w /var/www/limesurvey/application/config
 
 COPY nginx.conf /etc/nginx/sites-enabled/limesurvey.conf
-COPY www.conf /etc/php/7.4/fpm/pool.d/www.conf
+COPY www.conf /etc/php/8.2/fpm/pool.d/www.conf
 COPY run.sh /usr/local/bin/run
 
 VOLUME /app/config
