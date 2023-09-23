@@ -18,7 +18,6 @@ jobs:
         container:
           - bitpoll
           - etherpad
-          - gitea
           - karma
           - limesurvey
           - nextcloud
