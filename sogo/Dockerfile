@@ -1,7 +1,7 @@
 FROM debian:bullseye-slim
 
 ENV UID=2007
-ENV VERSION=5.8.2
+ENV VERSION=5.9.0
 
 RUN useradd -u $UID -g nogroup sogo
 RUN apt update
