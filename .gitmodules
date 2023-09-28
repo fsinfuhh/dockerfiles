@@ -4,22 +4,9 @@
 [submodule "tauschen/directory"]
 	path = tauschen/directory
 	url = git@git.mafiasi.de:mafiasi-ag/mafiasi-directory.git
-[submodule "preoerb/oerb"]
-	path = preoerb/oerb
-	url = git@git.mafiasi.de:oe/oerb.git
-[submodule "oestatus/oestatus-v3"]
-	path = oestatus/oestatus-v3
-	url = git@git.mafiasi.de:oe/oestatus-v3.git
-[submodule "stammbaum/stammbaum"]
-	path = stammbaum/stammbaum
-	url = git@git.mafiasi.de:oe/stammbaum.git
 [submodule "mensautils/mensa-utils"]
 	path = mensautils/mensa-utils
 	url = git@git.mafiasi.de:mafiasi-ag/mensa-utils.git
-[submodule "familiendoell/familiendOEll-auswerter"]
-	path = familiendoell/familiendOEll-auswerter
-	url = git@git.mafiasi.de:oe/familiendOEll-auswerter.git
-	branch = master
 [submodule "engelsystem/engelsystem"]
 	path = engelsystem/engelsystem
 	url = git@github.com:engelsystem/engelsystem.git
