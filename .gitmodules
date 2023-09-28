@@ -23,6 +23,3 @@
 [submodule "engelsystem/engelsystem"]
 	path = engelsystem/engelsystem
 	url = git@github.com:engelsystem/engelsystem.git
-[submodule "oe-stundenplan/oe-stundenplan"]
-	path = oe-stundenplan/oe-stundenplan
-	url = git@git.mafiasi.de:oe/oe-stundenplan.git
