@@ -4,9 +4,6 @@
 [submodule "tauschen/directory"]
 	path = tauschen/directory
 	url = git@git.mafiasi.de:mafiasi-ag/mafiasi-directory.git
-[submodule "mensautils/mensa-utils"]
-	path = mensautils/mensa-utils
-	url = git@git.mafiasi.de:mafiasi-ag/mensa-utils.git
 [submodule "engelsystem/engelsystem"]
 	path = engelsystem/engelsystem
 	url = git@github.com:engelsystem/engelsystem.git

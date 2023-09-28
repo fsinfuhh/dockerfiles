@@ -17,7 +17,9 @@ jobs:
       matrix:
         container:
           - etherpad
+          - indico
           - limesurvey
+          - minecraft
           - nextcloud
           - sogo
     uses: ./.github/workflows/build_single_container.yml
