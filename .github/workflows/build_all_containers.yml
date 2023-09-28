@@ -16,7 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         container:
-          - bitpoll
           - etherpad
           - karma
           - limesurvey
