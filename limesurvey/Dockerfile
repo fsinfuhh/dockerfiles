@@ -20,18 +20,19 @@ RUN mkdir -p /var/www /run/php
 WORKDIR /var/www
 
 # Get download URL here: https://community.limesurvey.org/downloads/
-ARG LIMESURVEY_RELEASE=https://download.limesurvey.org/latest-master/limesurvey6.2.7+230918.zip
+ARG LIMESURVEY_RELEASE=https://download.limesurvey.org/latest-master/limesurvey6.3.1+231023.zip
 RUN wget $LIMESURVEY_RELEASE -O limesurvey.zip
 RUN unzip limesurvey.zip
 RUN rm -rf limesurvey/upload
 
-RUN mkdir -p /app/config /app/upload
+RUN mkdir -p /app/config /app/upload /opt/log/
+RUN touch /opt/log/limesurvey.log.slow
 RUN ln -sf /app/config/config.php /var/www/limesurvey/application/config/config.php
 RUN ln -sf /app/config/security.php /var/www/limesurvey/application/config/security.php
 RUN ln -sf /app/upload /var/www/limesurvey/upload
 RUN chmod o+w /var/www/limesurvey/application/config
 
-COPY nginx.conf /etc/nginx/sites-enabled/limesurvey.conf
+COPY nginx.conf /etc/nginx/sites-enabled/default
 COPY www.conf /etc/php/8.2/fpm/pool.d/www.conf
 COPY run.sh /usr/local/bin/run
 
