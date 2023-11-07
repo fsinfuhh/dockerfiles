@@ -4,6 +4,8 @@
 install -o sogo -g nogroup -m 755 -d /var/run/sogo
 install -o sogo -g nogroup -m 750 -d /var/log/sogo
 
+chown sogo /opt/log
+
 # copy static
 cp -r /usr/local/lib/GNUstep/SOGo/WebServerResources/* /opt/static/
 
