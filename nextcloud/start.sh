@@ -6,4 +6,4 @@ nginx
 
 export USER=www-data HOME=/home/www-data
 mkdir /run/php
-exec /usr/sbin/php-fpm7.4 --nodaemonize --fpm-config /etc/php/7.4/fpm/php-fpm.conf
+exec /usr/sbin/php-fpm8.2 --nodaemonize --fpm-config /etc/php/8.2/fpm/php-fpm.conf
