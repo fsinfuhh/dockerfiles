@@ -38,13 +38,13 @@ RUN apt-get update; \
     chown -R www-data /var/www/nextcloud/config
 
 # install richdocuments
-ARG RICHDOCUMENTS_VERSION=v7.1.3
+ARG RICHDOCUMENTS_VERSION=v8.2.2
 RUN mkdir /var/www/nextcloud/apps/richdocuments && \
     wget -qO- https://github.com/nextcloud/richdocuments/archive/refs/tags/${RICHDOCUMENTS_VERSION}.tar.gz |\
     tar -C /var/www/nextcloud/apps/richdocuments --strip-components 1 -xz --no-same-owner
 
 # install deck app
-ARG DECK_VERSION=v1.9.0
+ARG DECK_VERSION=v1.11.0
 RUN wget -qO- https://github.com/nextcloud/deck/releases/download/${DECK_VERSION}/deck.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
