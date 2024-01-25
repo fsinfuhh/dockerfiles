@@ -5,5 +5,5 @@ chown -R www-data /var/www/nextcloud/config /var/www/nextcloud/apps /opt/log
 nginx
 
 export USER=www-data HOME=/home/www-data
-mkdir /run/php
+mkdir -p /run/php
 exec /usr/sbin/php-fpm8.2 --nodaemonize --fpm-config /etc/php/8.2/fpm/php-fpm.conf

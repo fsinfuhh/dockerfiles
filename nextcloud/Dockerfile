@@ -38,14 +38,19 @@ RUN apt-get update; \
     chown -R www-data /var/www/nextcloud/config
 
 # install richdocuments
-ARG RICHDOCUMENTS_VERSION=v8.2.2
+ARG RICHDOCUMENTS_VERSION=v8.2.4
 RUN mkdir /var/www/nextcloud/apps/richdocuments && \
     wget -qO- https://github.com/nextcloud/richdocuments/archive/refs/tags/${RICHDOCUMENTS_VERSION}.tar.gz |\
     tar -C /var/www/nextcloud/apps/richdocuments --strip-components 1 -xz --no-same-owner
 
 # install deck app
-ARG DECK_VERSION=v1.11.0
+ARG DECK_VERSION=v1.11.3
 RUN wget -qO- https://github.com/nextcloud/deck/releases/download/${DECK_VERSION}/deck.tar.gz |\
+    tar -C /var/www/nextcloud/apps -xz --no-same-owner
+
+# install oidc login
+ARG OIDC_VERSION=v3.0.2
+RUN wget -qO- https://github.com/pulsejet/nextcloud-oidc-login/releases/download/${OIDC_VERSION}/oidc_login.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
 RUN ln -sf /opt/config/nginx.conf /etc/nginx/sites-enabled/default; \
