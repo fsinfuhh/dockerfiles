@@ -12,6 +12,7 @@ RUN apt-get update; \
         ca-certificates \
         nginx \
         wget \
+        patch \
         php8.2 \
         php8.2-apcu \
         php8.2-curl \
@@ -36,6 +37,10 @@ RUN apt-get update; \
     tar -C /var/www -xj --no-same-owner; \
     chown -R www-data /var/www/nextcloud/apps; \
     chown -R www-data /var/www/nextcloud/config
+
+# disable nextcloud message about unsupported notifications (because we have more than 5000 users)
+ADD disable_notification_message.patch /tmp/disable_notification_message.patch
+RUN patch -p1 -d /var/www/nextcloud < /tmp/disable_notification_message.patch
 
 # install richdocuments
 ARG RICHDOCUMENTS_VERSION=v8.2.4

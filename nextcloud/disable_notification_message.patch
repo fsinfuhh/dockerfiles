@@ -1,0 +1,15 @@
+--- nextcloud/core/Controller/LoginController.php	2023-10-26 19:21:37.000000000 +0200
++++ nextcloud/core/Controller/LoginController.php	2024-01-25 16:17:32.161511093 +0100
+@@ -148,12 +148,6 @@
+ 		}
+ 
+ 		$loginMessages = $this->session->get('loginMessages');
+-		if (!$this->manager->isFairUseOfFreePushService()) {
+-			if (!is_array($loginMessages)) {
+-				$loginMessages = [[], []];
+-			}
+-			$loginMessages[1][] = $this->l10n->t('This community release of Nextcloud is unsupported and push notifications are limited.');
+-		}
+ 		if (is_array($loginMessages)) {
+ 			[$errors, $messages] = $loginMessages;
+ 			$this->initialStateService->provideInitialState('core', 'loginMessages', $messages);
