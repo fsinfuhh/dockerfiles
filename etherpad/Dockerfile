@@ -1,6 +1,6 @@
-FROM node:12-buster
+FROM node:20-alpine
 
-ENV VERSION=1.8.18
+ENV VERSION=2.1.1
 
 RUN mkdir -p /app/etherpad; \
     wget -nv https://github.com/ether/etherpad-lite/archive/$VERSION.tar.gz -O- | tar -C /app/etherpad --strip-components=1 -xz
