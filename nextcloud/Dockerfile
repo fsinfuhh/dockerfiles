@@ -43,18 +43,18 @@ ADD disable_notification_message.patch /tmp/disable_notification_message.patch
 RUN patch -p1 -d /var/www/nextcloud < /tmp/disable_notification_message.patch
 
 # install richdocuments
-ARG RICHDOCUMENTS_VERSION=v8.2.4
+ARG RICHDOCUMENTS_VERSION=v8.4.3
 RUN mkdir /var/www/nextcloud/apps/richdocuments && \
     wget -qO- https://github.com/nextcloud/richdocuments/archive/refs/tags/${RICHDOCUMENTS_VERSION}.tar.gz |\
     tar -C /var/www/nextcloud/apps/richdocuments --strip-components 1 -xz --no-same-owner
 
 # install deck app
-ARG DECK_VERSION=v1.11.3
-RUN wget -qO- https://github.com/nextcloud/deck/releases/download/${DECK_VERSION}/deck.tar.gz |\
+ARG DECK_VERSION=v1.12.4
+RUN wget -qO- https://github.com/nextcloud-releases/deck/releases/download/${DECK_VERSION}/deck.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
 # install oidc login
-ARG OIDC_VERSION=v3.0.2
+ARG OIDC_VERSION=v3.1.1
 RUN wget -qO- https://github.com/pulsejet/nextcloud-oidc-login/releases/download/${OIDC_VERSION}/oidc_login.tar.gz |\
     tar -C /var/www/nextcloud/apps -xz --no-same-owner
 
