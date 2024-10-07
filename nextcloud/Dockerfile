@@ -75,9 +75,7 @@ RUN ln -sf /opt/config/nginx.conf /etc/nginx/sites-enabled/default; \
 
 RUN chown www-data /opt/config
 
-ADD start.sh /usr/local/bin/run
-ADD cron.sh /usr/local/bin/cron.sh
-ADD background-worker.sh /usr/local/bin/background-worker.sh
+ADD start.sh longcron.sh quickcron.sh background-worker.sh /usr/local/bin/
 VOLUME /opt/storage /opt/config /opt/log /opt/static
 EXPOSE 9787/tcp
 ENTRYPOINT /usr/local/bin/run
