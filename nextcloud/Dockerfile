@@ -64,7 +64,7 @@ RUN ln -sf /opt/config/nginx.conf /etc/nginx/sites-enabled/default; \
     ln -s /var/log/php8.2-fpm.log /opt/log/php8.2-fpm.error.log; \
     { echo 'opcache.enable=1'; \
       echo 'opcache.enable_cli=1'; \
-      echo 'opcache.interned_strings_buffer=8'; \
+      echo 'opcache.interned_strings_buffer=50'; \
       echo 'opcache.max_accelerated_files=10000'; \
       echo 'opcache.memory_consumption=128'; \
       echo 'opcache.save_comments=1'; \
