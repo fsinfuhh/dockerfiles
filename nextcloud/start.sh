@@ -6,4 +6,7 @@ nginx
 
 export USER=www-data HOME=/home/www-data
 mkdir -p /run/php
+
+runuser -u www-data php /var/www/nextcloud/occ upgrade
+
 exec /usr/sbin/php-fpm8.2 --nodaemonize --fpm-config /etc/php/8.2/fpm/php-fpm.conf
