@@ -6,6 +6,7 @@ ARG GID=3001
 RUN groupmod -g $GID www-data
 RUN usermod -u $UID -g $GID -d /var/www/ www-data
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update; \
     apt-get -y --no-install-recommends install \
         vim \
@@ -40,7 +41,7 @@ RUN apt-get update; \
 
 # disable nextcloud message about unsupported notifications (because we have more than 5000 users)
 ADD disable_notification_message.patch /tmp/disable_notification_message.patch
-RUN patch -p1 -d /var/www/nextcloud < /tmp/disable_notification_message.patch
+RUN patch --no-backup-if-mismatch -p1 -d /var/www/nextcloud < /tmp/disable_notification_message.patch
 
 # install richdocuments
 ARG RICHDOCUMENTS_VERSION=v8.5.1
