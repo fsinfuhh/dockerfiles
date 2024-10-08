@@ -78,4 +78,4 @@ RUN chown www-data /opt/config
 ADD start.sh longcron.sh quickcron.sh background-worker.sh /usr/local/bin/
 VOLUME /opt/storage /opt/config /opt/log /opt/static
 EXPOSE 9787/tcp
-ENTRYPOINT /usr/local/bin/run
+CMD [ "/usr/local/bin/start.sh" ]
