@@ -28,6 +28,7 @@ RUN echo /usr/local/lib > /etc/ld.so.conf.d/sogo.conf
 RUN echo /usr/local/lib/sogo > /etc/ld.so.conf.d/sogo.conf
 RUN ldconfig
 
+RUN mkdir -p /usr/local/lib/GNUstep/SOGo/WebServerResources/css/
 RUN echo ".sg-event--cancelled{display: none !important;}" >> /usr/local/lib/GNUstep/SOGo/WebServerResources/css/theme-default.css
 
 COPY run /usr/local/bin/run
