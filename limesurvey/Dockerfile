@@ -20,7 +20,7 @@ RUN mkdir -p /var/www /run/php
 WORKDIR /var/www
 
 # Get download URL here: https://community.limesurvey.org/downloads/
-ARG LIMESURVEY_RELEASE=https://download.limesurvey.org/latest-master/limesurvey6.6.6+241002.zip
+ARG LIMESURVEY_RELEASE=https://download.limesurvey.org/latest-master/limesurvey6.12.2+250324.zip
 RUN wget $LIMESURVEY_RELEASE -O limesurvey.zip
 RUN unzip limesurvey.zip
 RUN rm -rf limesurvey/upload
