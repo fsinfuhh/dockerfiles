@@ -1,10 +1,9 @@
-FROM docker.io/debian:bullseye-slim
+FROM docker.io/python:3.12-bookworm
 
-ARG VERSION=2.3.5
 RUN apt update
 RUN apt install -y libpq-dev nginx python3-dev python3-pip libxslt1-dev libxml2-dev libffi-dev libpcre3-dev libyaml-dev build-essential uwsgi uwsgi-plugin-python3 libjpeg62-turbo-dev libsasl2-dev libldap2-dev libssl-dev
 
-ENV VERSION=3.2.9
+ENV VERSION=3.3.6
 RUN pip install uWSGI python-ldap
 RUN pip install indico==$VERSION jsonschema==4.*
 
