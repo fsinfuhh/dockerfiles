@@ -6,15 +6,9 @@ index f516292bf..71d970270 100644
  
  - (NSArray *) membersForGroupWithUID: (NSString *) uid
  {
--  NSMutableArray *dns, *uids;
-+  NSMutableArray *dns, *uids, *logins;
    NSString *dn, *login;
    SOGoUserManager *um;
--  NSDictionary *d, *contactInfos;
-+  NSDictionary *d;
    SOGoUser *user;
--  NSArray *o, *subusers, *logins;
-+  NSArray *o;
    NSAutoreleasePool *pool;
    int i, c;
    NGLdapEntry *entry;
@@ -22,7 +16,6 @@ index f516292bf..71d970270 100644
        members = [NSMutableArray new];
        uids = [NSMutableArray array];
        dns = [NSMutableArray array];
-+      logins = [NSMutableArray array];
  
        // We check if it's a static group
        // Fetch "members" - we get DNs
@@ -40,8 +33,6 @@ index f516292bf..71d970270 100644
 -                    {
 -                      [members addObject: user];
 -                    }
-+                  [logins addObject: login];
-+                  [members addObject: user];
                  }
                [pool release];
              }
@@ -59,15 +50,12 @@ index f516292bf..71d970270 100644
 -                    {
 -                      [members addObject: user];
 -                    }
-+                  [logins addObject: login];
-+                  [members addObject: user];
                  }
                [pool release];
              }
  
            // We are done fetching members, let's cache the members of the group
            // (ie., their UIDs) in memcached to speed up -groupWithUIDHasMemberWithUID.
--          logins = [members resultsOfSelector: @selector (loginInDomain)];
            [[SOGoCache sharedCache] setValue: [logins componentsJoinedByString: @","]
                                       forKey: [NSString stringWithFormat: @"%@+%@", uid, _domain]];
          }
