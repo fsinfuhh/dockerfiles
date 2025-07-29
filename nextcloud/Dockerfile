@@ -1,5 +1,5 @@
 FROM debian:bookworm-slim
-ARG VERSION=31.0.0
+ARG VERSION=32.0.0
 ARG UID=3001
 ARG GID=3001
 
