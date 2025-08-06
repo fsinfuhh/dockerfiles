@@ -10,4 +10,5 @@ chown sogo /opt/log
 cp -r /usr/local/lib/GNUstep/SOGo/WebServerResources/* /opt/static/
 
 export USER=sogo HOME=/home/sogo
+tail -F /opt/log/sogo.log &
 exec uwsgi --ini /etc/uwsgi/sogo.ini
