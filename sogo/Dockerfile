@@ -17,6 +17,7 @@ ADD ldap_fix.patch /
 RUN cd /build && \
     wget -q https://github.com/inverse-inc/sogo/archive/SOGo-$VERSION.tar.gz -O- | tar -xz && \
     cd sogo-SOGo-$VERSION && \
+    patch -p1 < /ldap_fix.patch && \
     ./configure && make && make install && \
     cd / && \
     rm -rf /build
